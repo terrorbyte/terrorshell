@@ -70,66 +70,73 @@ txtrst='\e[0m'    # Text Reset
 #Get package manager
 # Debian, Ubuntu and derivatives (with apt-get)
 #PKGMNGR=""
-if [[ ! -d ~/.pkgmngr  ]]; then
+if [[ ! -e ~/.pkgmngr ]]; then
+	echo "###################"
 	echo "First time setup..."
-	echo "Please edit ~/.bashrc if you want to get full functinality from this bash configuration"
+	echo "###################"
+	echo -e "$txtred NOTE: Please edit ~/.bashrc if you want to get full functinality from this bash configuration$txtrst"
 	echo "Run 'alias' to view the aliases loaded at any time."
 	if which apt-get &> /dev/null; then
-       		echo "PKGMNGR='apt-get'" >> ~/.pkgmngr 	
+       		echo "PKGMNGR='apt-get'" > ~/.pkgmngr 	
 		#apt-get install $PKGSTOINSTALL
         # OpenSuse (with zypper)
 	elif which zypper &> /dev/null; then
-		echo "PKGMNGR='zypper'" >> ~/.pkgmngr
+		echo "PKGMNGR='zypper'" > ~/.pkgmngr
 		#"zypper in $PKGSTOINSTALL"
         # Mandriva (with urpmi)
 	elif which urpmi &> /dev/null; then
-      		echo "PKGMNGR='urmpi'" >> ~/.pkgmngr
+      		echo "PKGMNGR='urmpi'" > ~/.pkgmngr
 		#urpmi $PKGSTOINSTALL
         # Fedora and CentOS (with yum)
 	elif which yum &> /dev/null; then
-      		echo "PKGMNGR='yum'" >> ~/.pkgmngr
+      		echo "PKGMNGR='yum'" > ~/.pkgmngr
 		#yum install $PKGSTOINSTALL
         # ArchLinux (with pacman)
 	elif which pacman &> /dev/null; then
-       		echo "PKGMNGR='pacman'" >> ~/.pkgmngr
+       		echo "PKGMNGR='pacman'" > ~/.pkgmngr
 		#pacman -Sy $PKGSTOINSTALL
         # Else, if no package manager has been found
 	else
         # Set $NOPKGMANAGER
-		echo "PKGMNGR=''"
-		echo "ERROR: No package manager found. Please, manually add these settings into ~/.pkgmngr"
+		echo "PKGMNGR=''" > ~/.pkgmngr
+		. ~/.pkgmngr
+		if [[ $PKGMNGR == '' ]]; then
+			echo "ERROR 1: No package manager found. Please, manually add these settings into ~/.pkgmngr"
+		fi
 fi
 else
 	. ~/.pkgmngr
 fi
 
-if [[ $PKGMNGR == 'apt-get' ]]; then
-	INSTALLCMD='sudo $PKGMNGR install'
-	UPDATECMD='sudo $PKGMNGR update && sudo $PKGMNGR upgrade && sudo $PKGMNGR dist-upgrade && sudo $PKGMNGR clean'
-	UPDATEMIRRORCMD='sudo $PKGMNGR update'
-	REMOVECMD='sudo $PKGMNGR remove'
-elif [[ $PKGMNGR == 'zypper' ]]; then
+if [[ $PKGMNGR = 'apt-get' ]]; then
+	INSTALLCMD="sudo $PKGMNGR install"
+	UPDATECMD="sudo $PKGMNGR update && sudo $PKGMNGR upgrade && sudo $PKGMNGR dist-upgrade && sudo $PKGMNGR clean"
+	UPDATEMIRRORCMD="sudo $PKGMNGR update"
+	REMOVECMD="sudo $PKGMNGR remove"
+elif [[ $PKGMNGR = 'zypper' ]]; then
 	INSTALLCMD='$PKGMNGR in'
 	UPDATECMD='$PKGMNGR up'
 	UPDATEMIRRORCMD='$PKGMNGR ref'
 	REMOVECMD='$PKGMNGR remove'
-elif [[ $PKGMNGR == 'urmpi' ]]; then
+elif [[ $PKGMNGR = 'urmpi' ]]; then
 	INSTALLCMD='$PKGMNGR' 
         UPDATECMD='$PKGMNGR.update -a'
         UPDATEMIRRORCMD='$UPDATECMD && echo "Cannot just update mirrors with urmpi"'
         REMOVECMD='urpme'
-elif [[ $PKGMNGR == 'yum'  ]]; then
+elif [[ $PKGMNGR = 'yum'  ]]; then
 	INSTALLCMD='$PKGMNGR install'
         UPDATECMD='$PKGMNGR update'
         UPDATEMIRRORCMD='$PKGMNGR update && echo "Cannot just update mirrors with yum"'
         REMOVECMD='$PKGMNGR remove'
-elif [[ $PKGMNGR == 'pacman' ]]; then
+elif [[ $PKGMNGR = 'pacman' ]]; then
 	INSTALLCMD='$PKGMNGR -Sy' 
         UPDATECMD='$PKGMNGR -Syu'
         UPDATEMIRRORCMD='$PKGMNGR -Syy'
         REMOVECMD='$PKGMNGR -Rs'
 else
-	echo "ERROR: No package manager found. Please, manually add these settings into ~/.pkgmngr"
+	if [[ ! -e ~/.pkgmngr ]]; then
+		echo "ERROR 2: No package manager found. Please, manually add these settings into ~/.pkgmngr"
+	fi
 fi
 
 ###PS1
