@@ -4,14 +4,33 @@
 #export TERM=linux
 NAME=""
 EMAIL=""
+#For tun alias (Remote computer to ssh into)
+TUNUSER=""
+TUNSRV=""
+#Note sync settings
+#Full path of local computer
+FROMFOLDER=""
+#Full path of remote computer
+TOFOLDER=""
+#Server #INCLUDE USER#
+NOTESSRV=""
+
+
+#if [[ $NAME == ""  ]] then;
+#	echo "Enter your name: "
+#fi
+#
+#if [[ $EMAIL == "" ]] then;
+#	echo "Enter your e-mail: "
+#fi
 
 #For testing
 UNICODECHAR1="[☣]"
 UNICODECHAR2="[∴]"
 
-#DEBEMAIL="$EMAIL"
-#DEBFULLNAME="$NAME"
-#export DEBEMAIL DEBFULLNAME
+DEBEMAIL="$EMAIL"
+DEBFULLNAME="$NAME"
+export DEBEMAIL DEBFULLNAME
 
 ###COLORS###
 txtblk='\e[0;30m' # Black - Regular
@@ -52,6 +71,9 @@ txtrst='\e[0m'    # Text Reset
 # Debian, Ubuntu and derivatives (with apt-get)
 #PKGMNGR=""
 if [[ ! -d ~/.pkgmngr  ]]; then
+	echo "First time setup..."
+	echo "Please edit ~/.bashrc if you want to get full functinality from this bash configuration"
+	echo "Run 'alias' to view the aliases loaded at any time."
 	if which apt-get &> /dev/null; then
        		echo "PKGMNGR='apt-get'" >> ~/.pkgmngr 	
 		#apt-get install $PKGSTOINSTALL
@@ -130,49 +152,48 @@ shopt -s autocd
 #shopt -s checkwinsize
 
 #Aliases
+#Battery / Monitor / Keyboard
 alias bat='upower -d | grep percentage && upower -d | grep time'
 alias battery='upower -d | grep percentage && upower -d | grep time'
-
 alias bright='sudo setpci -s 00:02.0 F4.B=96'
-
 alias kb='setxkbmap -option grp:alt_shift_toggle us,dvorak'
 
-alias ip='curl -s http://checkip.dyndns.org/ | grep -o '[0-9][0-9]*.[0-9][0-9]*.[0-9][0-9]*.[0-9]*''
-
-alias attach='tmux attach'
-
-alias calendar='google calendar'
-alias reminder='google calendar --reminder'
-
+#Navigation
 alias cl='clear'
 alias ba='cd -'
 alias disk='df'
 alias up='cd ..'
 alias rmf='rm -rf'
-
 alias ls='ls --color=auto'
 alias lsa='ls -a --color=auto'
 alias lsl='ls -la --color=auto'
-
-alias irc='irssi'
-
-alias links='links google.com'
+alias attach='tmux attach'
 
 #alias mail='ssmtp'
+#Remote and Sync
 #UNFINISHED
-alias notes-from='rsync -avz -e "ssh" $NOTESSERVER:/home/$NOTESUSER/School/ ~/$TOFOLDER/'
-alias notes-to='rsync -avz -e "ssh" ~/$TOFOLDER/ $NOTESSERVER:~/School/'
-
-alias tun='pkill firefox & sleep 2s && firefox -P tunnel & ssh -D 1331 black@tomato.cs.colostate.edu'
-#Requires a profile called tunnel that has proxy settings (socks5) set
+alias notes-from='rsync -avz -e "ssh" $NOTESSRV:FROMFOLDER $TOFOLDER'
+alias notes-to='rsync -avz -e "ssh" $TOFOLDER $NOTESSRV:$FROMFOLDER'
 
 alias rfs='sshfs'
+alias tun='pkill firefox & sleep 2s && firefox -P tunnel & ssh -D 1331 $TUNUSER@$TUNSRV'
+alias ip='curl -s http://checkip.dyndns.org/ | grep -o '[0-9][0-9]*.[0-9][0-9]*.[0-9][0-9]*.[0-9]*''
+alias calendar='google calendar'
+alias reminder='google calendar --reminder'
+alias irc='irssi'
+alias links='links google.com'
 
+#Requires a profile called tunnel that has proxy settings (socks5) set
+
+#Encryption / GPG
 alias enc='echo "Enter file name to encrypt:" && read -e ENCFILE && openssl aes-256-cbc -a -salt -in $ENCFILE -out $ENCFILE.enc && echo "File $ENCFILE is encrypted to $ENCFILE.enc" && ENCFILE=""'
 alias dec='echo "Enter file name to decrypt:" && read -e DECFILE && openssl aes-256-cbc -d -a -in $DECFILE -out $DECFILE.new && echo "File $DECFILE is decrypted to $DECFILE.new" && DECFILE=""'
 alias gpgbackup='DAY=$(date +"%m-%d") && tar -zcvf $DAY.tar.gz .gnupg/ && openssl aes-256-cbc -a -salt -in $DAY.tar.gz -out $DAY.enc && rm $DAY.tar.gz' #Change to secure delete if using a non SSD
 
+#System / Package manager commands
 alias install='$INSTALLCMD'
 alias update='$UPDATEMIRRORCMD'
 alias upgrade='$UPDATECMD'
 alias remove='$REMOVECMD'
+
+alias updatebashrc='cd ~/ && cp .bashrc .bashrc.bak && wget https://github.com/terrorbyte/bashrc/raw/master/.bashrc && cd -'
