@@ -198,9 +198,9 @@ alias dec='echo "Enter file name to decrypt:" && read -e DECFILE && openssl aes-
 alias gpgbackup='DAY=$(date +"%m-%d") && tar -zcvf $DAY.tar.gz .gnupg/ && openssl aes-256-cbc -a -salt -in $DAY.tar.gz -out $DAY.enc && rm $DAY.tar.gz' #Change to secure delete if using a non SSD
 
 #System / Package manager commands
-alias install='$INSTALLCMD'
-alias update='$UPDATEMIRRORCMD'
-alias upgrade='$UPDATECMD'
-alias remove='$REMOVECMD'
+alias install="$INSTALLCMD"
+alias update="$UPDATEMIRRORCMD"
+alias upgrade="$UPDATECMD"
+alias remove="$REMOVECMD"
 
 alias updatebashrc='cd ~/ && cp .bashrc .bashrc.bak && wget https://github.com/terrorbyte/bashrc/raw/master/.bashrc && cd -'
