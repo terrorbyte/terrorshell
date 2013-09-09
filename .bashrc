@@ -104,6 +104,8 @@ if [[ ! -e ~/.pkgmngr ]]; then
 			echo "ERROR 1: No package manager found. Please, manually add these settings into ~/.pkgmngr"
 		fi
 fi
+	echo -e "$txtred In order for the package manager aliases to work properly you must also make this script root's .bashrc"
+	#TODO 
 else
 	. ~/.pkgmngr
 fi
