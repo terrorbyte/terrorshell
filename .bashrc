@@ -105,7 +105,7 @@ elif [[ $PKGMNGR = 'urmpi' ]]; then
         REMOVECMD='urpme'
 elif [[ $PKGMNGR = 'yum'  ]]; then
 	INSTALLCMD='$PKGMNGR install'
-        UPDATECMDUPDATECMD='$PKGMNGR update'
+        UPDATECMD='$PKGMNGR update'
         UPDATEMIRRORCMD='$PKGMNGR update && echo "Cannot just update mirrors with yum"'
         REMOVECMD='$PKGMNGR remove'
 elif [[ $PKGMNGR = 'pacman' || $PKGMNGR = 'pacaur' || $PKGMNGR = 'yaourt' ]]; then
