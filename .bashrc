@@ -4,33 +4,6 @@
 #export TERM=linux
 NAME=""
 EMAIL=""
-#For tun alias (Remote computer to ssh into)
-TUNUSER=""
-TUNSRV=""
-#Note sync settings
-#Full path of local computer
-FROMFOLDER=""
-#Full path of remote computer
-TOFOLDER=""
-#Server #INCLUDE USER#
-NOTESSRV=""
-
-
-#if [[ $NAME == ""  ]] then;
-#	echo "Enter your name: "
-#fi
-#
-#if [[ $EMAIL == "" ]] then;
-#	echo "Enter your e-mail: "
-#fi
-
-#For testing
-UNICODECHAR1="[☣]"
-UNICODECHAR2="[∴]"
-
-DEBEMAIL="$EMAIL"
-DEBFULLNAME="$NAME"
-export DEBEMAIL DEBFULLNAME
 
 ###COLORS###
 txtblk='\e[0;30m' # Black - Regular
@@ -66,6 +39,11 @@ bakpur='\e[45m'   # Purple
 bakcyn='\e[46m'   # Cyan
 bakwht='\e[47m'   # White
 txtrst='\e[0m'    # Text Reset
+
+#Print banner
+if [[ -e ~/.banner ]]; then
+	cat ~/.banner
+fi
 
 #Get package manager
 # Debian, Ubuntu and derivatives (with apt-get)
@@ -127,10 +105,10 @@ elif [[ $PKGMNGR = 'urmpi' ]]; then
         REMOVECMD='urpme'
 elif [[ $PKGMNGR = 'yum'  ]]; then
 	INSTALLCMD='$PKGMNGR install'
-        UPDATECMD='$PKGMNGR update'
+        UPDATECMDUPDATECMD='$PKGMNGR update'
         UPDATEMIRRORCMD='$PKGMNGR update && echo "Cannot just update mirrors with yum"'
         REMOVECMD='$PKGMNGR remove'
-elif [[ $PKGMNGR = 'pacman' ]]; then
+elif [[ $PKGMNGR = 'pacman' || $PKGMNGR = 'pacaur' || $PKGMNGR = 'yaourt' ]]; then
 	INSTALLCMD='$PKGMNGR -Sy' 
         UPDATECMD='$PKGMNGR -Syu'
         UPDATEMIRRORCMD='$PKGMNGR -Syy'
@@ -142,16 +120,14 @@ else
 fi
 
 ###PS1
-#PS1="\n\[\033[1;37m\]\342\224\214($(if [[ ${EUID} == 0 ]]; then echo '\[\033[01;31m\]\h'; else echo '\[\033[01;34m\]\u@\h'; fi)\[\033[1;37m\])\342\224\200(\[\033[1;34m\]\$?\[\033[1;37m\])\342\224\200(\[\033[1;34m\]\@ \d\[\033[1;37m\])\[\033[1;37m\]\n\342\224\224\342\224\200(\[\033[1;32m\]\w\[\033[1;37m\])\342\224\200(\[\033[1;32m\]\$(ls -1 | wc -l | sed 's: ::g') files, \$(ls -lah | grep -m 1 total | sed 's/total //')b\[\033[1;37m\])\342\224\200> \[\033[0m\]"
-#PS1="$(if [[ ${EUID} == 0 ]]; then echo '\e[0;31m\h'; else echo '\e[0m\u'; fi)$txtrst\342\224\200[$txtcyn\w$txtrst]\342\224\200$bldylw$UNICODECHAR1\342\224\200> $txtrst"
-#PS1="$(if [[ ${EUID} == 0 ]]; then echo '\e[0;31m\h'; else echo '\e[0m\u'; fi)$txtrst-[$txtcyn\w$txtrst]-$txtred $($(while sleep .3; do i=$((++i%4 + 2)); printf '\b|/-\' | cut -b 1,$i | tr -d '\012'; done) &)> $txtrst"
-#PS1="$(if [[ ${EUID} == 0 ]]; then echo '\e[0;31m\h'; else echo '\e[0m\u'; fi)$txtrst\342\224\200[$txtcyn\w$txtrst]\342\224\200$bldylw$UNICODECHAR1\342\224\200> $txtrst"
-#PS1="$(if [[ ${EUID} == 0 ]]; then echo '\e[0;31m\h'; else echo '\e[0m\u'; fi)$txtrst\342\224\200[$txtcyn\w$txtrst]\342\224\200$bldylw> $txtrst"
-#PS1="[☣]-$bldylw>$txtrst "
-PS1="$(if [[ ${EUID} == 0 ]]; then echo '\h'; else echo '\u'; fi)\342\224\200[\w]\342\224\200> "
+#OLD PS1
+#PS1="$(if [[ ${EUID} == 0 ]]; then echo '\h'; else echo '\u'; fi)\342\224\200[\w]\342\224\200> "
+PS1="$(if [[ ${EUID} == 0 ]]; then echo '\h'; else echo '\u'; fi)\342\224\200[\w]ハッカー> "
 
 ###Imports###
-. /etc/bash_completion
+if [[ -e /etc/bash_completion ]]; then
+	. /etc/bash_completion
+fi
 
 ###Output Standardizing###
 #trap 'echo -ne "\e[0m"' DEBUG
@@ -171,10 +147,11 @@ alias kb='setxkbmap -option grp:alt_shift_toggle us,dvorak'
 #Navigation
 alias cl='clear'
 alias ba='cd -'
-alias disk='df'
+alias disk='df -h'
 alias up='cd ..'
 alias rmf='rm -rfi'
-# safety features
+
+#Safety features
 alias cp='cp -i'
 alias mv='mv -i'
 alias rm='rm -I'
@@ -191,26 +168,15 @@ alias du='du -c -h'
 alias mkdir='mkdir -p -v'
 alias openports='ss --all --numeric --processes --ipv4 --ipv6'
 
-#alias mail='ssmtp'
-#Remote and Sync
-#UNFINISHED
-alias notes-from='rsync -avz -e "ssh" $NOTESSRV:FROMFOLDER $TOFOLDER'
-alias notes-to='rsync -avz -e "ssh" $TOFOLDER $NOTESSRV:$FROMFOLDER'
-
+#etc
 alias rfs='sshfs'
-alias tun='pkill firefox & sleep 2s && firefox -P tunnel & ssh -D 1331 $TUNUSER@$TUNSRV'
+#alias tun='pkill firefox & sleep 2s && firefox -P tunnel & ssh -D 9999 $TUNUSER@$TUNSRV'
 alias ip='curl -s http://checkip.dyndns.org/ | grep -o '[0-9][0-9]*.[0-9][0-9]*.[0-9][0-9]*.[0-9]*''
-alias calendar='google calendar'
-alias reminder='google calendar --reminder'
 alias irc='irssi'
 alias links='links google.com'
 
-#Requires a profile called tunnel that has proxy settings (socks5) set
-
 #Encryption / GPG
-alias enc='echo "Enter file name to encrypt:" && read -e ENCFILE && openssl aes-256-cbc -a -salt -in $ENCFILE -out $ENCFILE.enc && echo "File $ENCFILE is encrypted to $ENCFILE.enc" && ENCFILE=""'
-alias dec='echo "Enter file name to decrypt:" && read -e DECFILE && openssl aes-256-cbc -d -a -in $DECFILE -out $DECFILE.new && echo "File $DECFILE is decrypted to $DECFILE.new" && DECFILE=""'
-alias gpgbackup='DAY=$(date +"%m-%d") && tar -zcvf $DAY.tar.gz .gnupg/ && openssl aes-256-cbc -a -salt -in $DAY.tar.gz -out $DAY.enc && rm $DAY.tar.gz' #Change to secure delete if using a non SSD
+#enc and dec are builtin to openssl and are better
 
 #System / Package manager commands
 alias install="$INSTALLCMD"
@@ -255,4 +221,26 @@ extract() {
     done
 
     return $e
+}
+
+tunnel() {
+	#tun user@server 22 9999
+	if [[ $1 == "" || $2 == "" || $3 == "" ]]; then
+		echo "Useage: tunnel [user@server / config] [ssh port] [SOCKS5 proxy port]"
+		return 1
+	fi
+	ssh -D $3 -p $2 $1
+}
+
+md5() {
+	echo -n $"@" | md5sum | cut -d' ' -f1
+}
+
+sha() {
+	if [[ $1 == "" || $2 == "" ]]; then
+		echo "Useage: sha [size] [string]"
+		echo "Where size is 1,224,256,384,512"
+		return 1
+	fi
+	echo -n $2 | sha$1sum | cut -d' ' -f1
 }
