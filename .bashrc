@@ -136,6 +136,12 @@ fi
 shopt -s autocd
 shopt -s extglob
 #shopt -s checkwinsize
+###Inputrc Settings###
+bind 'set completion-ignore-case on'
+bind 'set completion-prefix-display-length 2'
+bind 'set show-all-if-ambiguous on'
+bind 'set show-all-if-unmodified on'
+bind 'set completion-map-case on'
 
 #Aliases
 #Battery / Monitor / Keyboard
