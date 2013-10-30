@@ -1,0 +1,1 @@
+PS1="$(git branch | grep '*' | cut -c3-) ->"

@@ -1,9 +1,29 @@
 #!/bin/bash
 
-###EDIT THESE###
+###CONFIG SECTION###
 #export TERM=linux
 NAME=""
 EMAIL=""
+GITSUPPORT="yes"
+DIR="~/.terrorshell"
+PROMPT="$DIR/prompt"
+###################
+
+###TODO############
+#* Create remove script for old style bashrc. Use "sed -i.bak -e '5,10d' file"
+#* Git integration
+#* Add more package managers
+#* "Themes" which are just a collection of PS1's and scripts
+#* Possibly more seperation into config files over raw text in bashrc (eg color, vimrc, tmuxrc, extract functions being in their own configs. !!!Will this slow down the import?!!!
+#* Github update improvements
+#* General UI improvements
+#* Alias's for designated directories
+#* Improved / Cleaned up alias's
+#* Module support !!!Speed impact?!!!
+#* Inputrc bind in a seperate config file
+#* Update command check for version info and warn that since it doesn't over-right that they need to change files according to the VERSION file
+#* terrorshell tools. Function to handle management of the bashrc, files, and modules
+###################
 
 ###COLORS###
 txtblk='\e[0;30m' # Black - Regular
@@ -40,52 +60,80 @@ bakcyn='\e[46m'   # Cyan
 bakwht='\e[47m'   # White
 txtrst='\e[0m'    # Text Reset
 
+#################################################
+#	CHECK FOR OLD CONFIG SETUP:		#
+#	WARNING THIS SECTION WILL BE DELETED	#
+#	ON THE ACTUAL INSTALL			#
+#################################################
+if [[ -e ~/.pkgmngr ]]; then
+	echo -n "Old file structure detected. Do you want to backup your old terrorshell before updating? (Y/n): "
+	read option
+	if [[ option == "Y" | option == "y" | option == "Yes" | option == "yes" | option == "YES" ]]; then
+		mkdir $DIR
+		mv ~/.pkgmngr $DIR/pkgmngr
+		mv ~/.bashrc $DIR/old.bak
+	else
+		mkdir $DIR
+		rm ~/.pkgmngr
+	fi
+	echo "PS1="$(if [[ ${EUID} == 0 ]]; then echo '\h'; else echo '\u'; fi)\342\224\200[\w]ハッカー> "" > $DIR/prompt
+	echo "PS1="$(git branch | grep '*' | cut -c3-) ->"" > $DIR/gitprompt
+	echo "if [ -d .git ]; then
+		. $DIR/gitprompt
+else
+	. $DIR/prompt
+fi" > $DIR/gitcheck
+fi
+
 #Print banner
-if [[ -e ~/.banner ]]; then
-	cat ~/.banner
+if [[ -e $DIR/banner ]]; then
+	cat $DIR/banner
 fi
 
 #Get package manager
 # Debian, Ubuntu and derivatives (with apt-get)
 #PKGMNGR=""
-if [[ ! -e ~/.pkgmngr ]]; then
+#TODO install script (or keep it portable?)
+if [[ ! -e $DIR/pkgmngr ]]; then
 	echo "###################"
 	echo "First time setup..."
 	echo "###################"
-	echo -e "$txtred NOTE: Please edit ~/.bashrc if you want to get full functinality from this bash configuration$txtrst"
+	echo -e "$txtred NOTE: This is doing a minimalist install. If you want the full version run updatebashrc $txtrst"
 	echo "Run 'alias' to view the aliases loaded at any time."
+	#TODO Check that it is okay to continue
+#	mkdir $DIR &> /dev/null
 	if which apt-get &> /dev/null; then
-       		echo "PKGMNGR='apt-get'" > ~/.pkgmngr 	
+       		echo "PKGMNGR='apt-get'" > $DIR/pkgmngr 	
 		#apt-get install $PKGSTOINSTALL
         # OpenSuse (with zypper)
 	elif which zypper &> /dev/null; then
-		echo "PKGMNGR='zypper'" > ~/.pkgmngr
+		echo "PKGMNGR='zypper'" > $DIR/pkgmngr
 		#"zypper in $PKGSTOINSTALL"
         # Mandriva (with urpmi)
 	elif which urpmi &> /dev/null; then
-      		echo "PKGMNGR='urmpi'" > ~/.pkgmngr
+      		echo "PKGMNGR='urmpi'" > $DIR/pkgmngr
 		#urpmi $PKGSTOINSTALL
         # Fedora and CentOS (with yum)
 	elif which yum &> /dev/null; then
-      		echo "PKGMNGR='yum'" > ~/.pkgmngr
+      		echo "PKGMNGR='yum'" > $DIR/pkgmngr
 		#yum install $PKGSTOINSTALL
         # ArchLinux (with pacman)
 	elif which pacman &> /dev/null; then
-       		echo "PKGMNGR='pacman'" > ~/.pkgmngr
+       		echo "PKGMNGR='pacman'" > $DIR/pkgmngr
 		#pacman -Sy $PKGSTOINSTALL
         # Else, if no package manager has been found
 	else
         # Set $NOPKGMANAGER
-		echo "PKGMNGR=''" > ~/.pkgmngr
-		. ~/.pkgmngr
+		echo "PKGMNGR=''" > $DIR/pkgmngr
+		. $DIR/pkgmngr
 		if [[ $PKGMNGR == '' ]]; then
-			echo "ERROR 1: No package manager found. Please, manually add these settings into ~/.pkgmngr"
+			echo "ERROR 1: No package manager found. Please, manually add these settings into $DIR/pkgmngr"
 		fi
 fi
 	echo -e "$txtred In order for the package manager aliases to work properly you must also make this script root's .bashrc"
-	#TODO 
+	#TODO Automatically 
 else
-	. ~/.pkgmngr
+	. $DIR/pkgmngr
 fi
 
 if [[ $PKGMNGR = 'apt-get' ]]; then
@@ -114,15 +162,24 @@ elif [[ $PKGMNGR = 'pacman' || $PKGMNGR = 'pacaur' || $PKGMNGR = 'yaourt' ]]; th
         UPDATEMIRRORCMD='$PKGMNGR -Syy'
         REMOVECMD='$PKGMNGR -Rs'
 else
-	if [[ ! -e ~/.pkgmngr ]]; then
-		echo "ERROR 2: No package manager found. Please, manually add these settings into ~/.pkgmngr"
+	if [[ ! -e $DIR/pkgmngr ]]; then
+		echo "ERROR 2: No package manager found. Please, manually add these settings into $DIR/pkgmngr"
 	fi
 fi
 
 ###PS1
+#Unicode shortcuts
+#⮀
 #OLD PS1
 #PS1="$(if [[ ${EUID} == 0 ]]; then echo '\h'; else echo '\u'; fi)\342\224\200[\w]\342\224\200> "
-PS1="$(if [[ ${EUID} == 0 ]]; then echo '\h'; else echo '\u'; fi)\342\224\200[\w]ハッカー> "
+#PS1="$(if [[ ${EUID} == 0 ]]; then echo '\h'; else echo '\u'; fi)\342\224\200[\w]ハッカー> "
+
+###Check for .git file###
+if [[ $GITSUPPORT == "yes" ]]; then
+	cd() { builtin cd "$@" && . $DIR/gitcheck }		
+else
+	. $DIR/prompt
+fi
 
 ###Imports###
 if [[ -e /etc/bash_completion ]]; then
@@ -176,7 +233,6 @@ alias openports='ss --all --numeric --processes --ipv4 --ipv6'
 
 #etc
 alias rfs='sshfs'
-#alias tun='pkill firefox & sleep 2s && firefox -P tunnel & ssh -D 9999 $TUNUSER@$TUNSRV'
 alias ip='curl -s http://checkip.dyndns.org/ | grep -o '[0-9][0-9]*.[0-9][0-9]*.[0-9][0-9]*.[0-9]*''
 alias irc='irssi'
 alias links='links google.com'
@@ -190,7 +246,22 @@ alias update="$UPDATEMIRRORCMD"
 alias upgrade="$UPDATECMD"
 alias remove="$REMOVECMD"
 
-alias updatebashrc='cd ~/ && cp .bashrc .bashrc.bak && wget https://github.com/terrorbyte/bashrc/raw/master/.bashrc && cd -'
+#alias updatebashrc='cd ~/ && cp .bashrc .bashrc.bak && wget https://github.com/terrorbyte/bashrc/raw/master/.bashrc && cd -'
+
+DATE="$(date +%d-%m)"
+
+updatebashrc() {
+	#TODO check for update folder
+	#TODO Output
+	mkdir $DIR/update
+	wget -P $DIR/update/ https://github.com/terrorbyte/bashrc/archive/master.zip
+	mv $DIR/update/master.zip $DIR/update/terrorshell-$DATE.zip
+	unzip $DIR/update/terrorshell-$DATE.zip -d $DIR/update
+	mv ~/.bashrc $DIR/update/bashrce-$DATE-.bak
+	mv $DIR/update/.bashrc ~/.bashrc
+	cp -rn $DIR/update/.terrorshell $DIR
+	rm -rf $DIR/update/.terrorshell
+}
 
 #Extract Function
 extract() {
