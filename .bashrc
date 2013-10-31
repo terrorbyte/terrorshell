@@ -257,7 +257,7 @@ updatebashrc() {
 	wget -P $DIR/update/ https://github.com/terrorbyte/bashrc/archive/master.zip
 	mv $DIR/update/master.zip $DIR/update/terrorshell-$DATE.zip
 	unzip $DIR/update/terrorshell-$DATE.zip -d $DIR/update
-	mv ~/.bashrc $DIR/update/bashrce-$DATE-.bak
+	mv ~/.bashrc $DIR/update/bashrc-$DATE-.bak
 	mv $DIR/update/.bashrc ~/.bashrc
 	cp -rn $DIR/update/.terrorshell $DIR
 	rm -rf $DIR/update/.terrorshell
