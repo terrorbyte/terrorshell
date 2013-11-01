@@ -66,27 +66,27 @@ txtrst='\e[0m'    # Text Reset
 #	WARNING THIS SECTION WILL BE DELETED	#
 #	ON THE ACTUAL INSTALL			#
 #################################################
-if [[ -e ~/.pkgmngr ]]; then
-	echo -n "Old file structure detected. Do you want to backup your old terrorshell before updating? (Y/n): "
-	read option
-	if [[ option == "Y" || option == "y" || option == "Yes" || option == "yes" || option == "YES" ]]; then
-		mkdir -p $DIR/{config,modules,templates,themes} 
-		mv ~/.pkgmngr $DIR/config/pkgmngr
-		mv ~/.bashrc $DIR/.bashrc.orig.bak
-	else
-		mkdir -p $DIR/{config,modules,templates,themes} 
-		rm ~/.pkgmngr
-	fi
-	echo "PS1="$(if [[ ${EUID} == 0 ]]; then echo '\h'; else echo '\u'; fi)\342\224\200[\w]ハッカー> "" > $DIR/themes/prompt
-	echo "PS1="$(git branch | grep '*' | cut -c3-) ->"" > $DIR/themes/gitprompt
-	echo "#!/bin/bash
-cd() { builtin cd "$@" && . $DIR/modules/gitcheck } 
-if [ -d .git ]; then
-		. $DIR/themes/gitprompt
-else
-	. $DIR/themes/prompt
-fi" > $DIR/modules/gitcheck
-fi
+#if [[ -e ~/.pkgmngr ]]; then
+#	echo -n "Old file structure detected. Do you want to backup your old terrorshell before updating? (Y/n): "
+#	read option
+#	if [[ option == "Y" || option == "y" || option == "Yes" || option == "yes" || option == "YES" ]]; then
+#		mkdir -p $DIR/{config,modules,templates,themes} 
+#		mv ~/.pkgmngr $DIR/config/pkgmngr
+#		mv ~/.bashrc $DIR/.bashrc.orig.bak
+#	else
+#		mkdir -p $DIR/{config,modules,templates,themes} 
+#		rm ~/.pkgmngr
+#	fi
+#	echo "PS1="$(if [[ ${EUID} == 0 ]]; then echo '\h'; else echo '\u'; fi)\342\224\200[\w]ハッカー> "" > $DIR/themes/prompt
+#	echo "PS1="$(git branch | grep '*' | cut -c3-) ->"" > $DIR/themes/gitprompt
+#	echo "#!/bin/bash
+#cd() { builtin cd "$@" && . $DIR/modules/gitcheck } 
+#if [ -d .git ]; then
+#		. $DIR/themes/gitprompt
+#else
+#	. $DIR/themes/prompt
+#fi" > $DIR/modules/gitcheck
+#fi
 
 #Print banner
 if [[ -e $DIR/themes/banner ]]; then
