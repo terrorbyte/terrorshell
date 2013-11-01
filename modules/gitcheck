@@ -1,8 +1,10 @@
 #/bin/bash
-cd() { builtin cd "$@" && . $DIR/modules/gitcheck } 
 
 if [ -d .git ]; then
-  . $DIR/theme/git$THEME
+  . $HOME/$DIR/themes/git$THEME
 else
-  . $DIR/theme/$THEME
-fi;
+  . $HOME/$DIR/themes/$THEME
+fi
+
+cd() { builtin cd "$@" && . $HOME/$DIR/modules/gitcheck; } 
+

@@ -1,0 +1,2 @@
+#!/bin/bash
+PS1="\[$bakblu\]\u\[$bakblu\]─[\w\[$txtrst\]\[$bakblu\]]ハッカー\[$txtrst\]\[$txtblu\]⮀\[$txtrst\] "

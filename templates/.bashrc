@@ -5,9 +5,10 @@
 NAME=""
 EMAIL=""
 GITSUPPORT="yes"
-DIR="~/.terrorshell"
+DIR=".terrorshell"
+#SUBDIR=""
 THEME="prompt"
-MODULES={gitcheck}
+MODULES=(gitcheck)
 ###################
 
 ###TODO############
@@ -89,15 +90,15 @@ txtrst='\e[0m'    # Text Reset
 #fi
 
 #Print banner
-if [[ -e $DIR/themes/banner ]]; then
-	cat $DIR/themes/banner
+if [[ -e $HOME/$DIR/themes/banner ]]; then
+	cat $HOME/$DIR/themes/banner
 fi
 
 #Get package manager
 # Debian, Ubuntu and derivatives (with apt-get)
 #PKGMNGR=""
 #TODO install script (or keep it portable?)
-if [[ ! -e $DIR/config/pkgmngr ]]; then
+if [[ ! -e $HOME/$DIR/config/pkgmngr ]]; then
 	echo "###################"
 	echo "First time setup..."
 	echo "###################"
@@ -105,37 +106,37 @@ if [[ ! -e $DIR/config/pkgmngr ]]; then
 	#TODO Check that it is okay to continue
 #	mkdir $DIR &> /dev/null
 	if which apt-get &> /dev/null; then
-       		echo "PKGMNGR='apt-get'" > $DIR/config/pkgmngr 	
+       		echo "PKGMNGR='apt-get'" > $HOME/$DIR/config/pkgmngr 	
 		#apt-get install $PKGSTOINSTALL
         # OpenSuse (with zypper)
 	elif which zypper &> /dev/null; then
-		echo "PKGMNGR='zypper'" > $DIR/config/pkgmngr
+		echo "PKGMNGR='zypper'" > $HOME/$DIR/config/pkgmngr
 		#"zypper in $PKGSTOINSTALL"
         # Mandriva (with urpmi)
 	elif which urpmi &> /dev/null; then
-      		echo "PKGMNGR='urmpi'" > $DIR/config/pkgmngr
+      		echo "PKGMNGR='urmpi'" > $HOME/$DIR/config/pkgmngr
 		#urpmi $PKGSTOINSTALL
         # Fedora and CentOS (with yum)
 	elif which yum &> /dev/null; then
-      		echo "PKGMNGR='yum'" > $DIR/config/pkgmngr
+      		echo "PKGMNGR='yum'" > $HOME/$DIR/config/pkgmngr
 		#yum install $PKGSTOINSTALL
         # ArchLinux (with pacman)
 	elif which pacman &> /dev/null; then
-       		echo "PKGMNGR='pacman'" > $DIR/config/pkgmngr
+       		echo "PKGMNGR='pacman'" > $HOME/$DIR/config/pkgmngr
 		#pacman -Sy $PKGSTOINSTALL
         # Else, if no package manager has been found
 	else
         # Set $NOPKGMANAGER
-		echo "PKGMNGR=''" > $DIR/config/pkgmngr
-		. $DIR/config/pkgmngr
+		echo "PKGMNGR=''" > $HOME/$DIR/config/pkgmngr
+		. $HOME/$DIR/config/pkgmngr
 		if [[ $PKGMNGR == '' ]]; then
-			echo "ERROR 1: No package manager found. Please, manually add these settings into $DIR/config/pkgmngr"
+			echo "ERROR 1: No package manager found. Please, manually add these settings into $HOME/$DIR/config/pkgmngr"
 		fi
 fi
-	echo -e "$txtred In order for the package manager aliases to work properly you must also make this script root's .bashrc"
+	echo -e "$txtred In order for the package manager aliases to work properly you must also make this script root's .bashrc $txtrst"
 	#TODO Automatically 
 else
-	. $DIR/config/pkgmngr
+	. $HOME/$DIR/config/pkgmngr
 fi
 
 if [[ $PKGMNGR = 'apt-get' ]]; then
@@ -164,8 +165,8 @@ elif [[ $PKGMNGR = 'pacman' || $PKGMNGR = 'pacaur' || $PKGMNGR = 'yaourt' ]]; th
         UPDATEMIRRORCMD='$PKGMNGR -Syy'
         REMOVECMD='$PKGMNGR -Rs'
 else
-	if [[ ! -e $DIR/config/pkgmngr ]]; then
-		echo "ERROR 2: No package manager found. Please, manually add these settings into $DIR/config/pkgmngr"
+	if [[ ! -e $HOME/$DIR/config/pkgmngr ]]; then
+		echo "ERROR 2: No package manager found. Please, manually add these settings into $HOME/$DIR/config/pkgmngr"
 	fi
 fi
 
@@ -175,7 +176,7 @@ fi
 #OLD PS1
 #PS1="$(if [[ ${EUID} == 0 ]]; then echo '\h'; else echo '\u'; fi)\342\224\200[\w]\342\224\200> "
 #PS1="$(if [[ ${EUID} == 0 ]]; then echo '\h'; else echo '\u'; fi)\342\224\200[\w]ハッカー> "
-. $DIR/themes/$THEME
+. $HOME/.terrorshell/themes/$THEME
 ###Check for .git file###
 #if [[ $GITSUPPORT == "yes" ]]; then
 #	cd() { builtin cd "$@" && . $DIR/modules/gitcheck }		
@@ -185,7 +186,7 @@ fi
 
 for module in $MODULES
 do
-	. $DIR/modules/$module
+	. $HOME/$DIR/modules/$module
 done
 ###Imports###
 if [[ -e /etc/bash_completion ]]; then
@@ -256,18 +257,18 @@ alias remove="$REMOVECMD"
 
 DATE="$(date +%d-%m)"
 
-updatebashrc() {
-	#TODO check for update folder
-	#TODO Output
-	mkdir $DIR/update
-	wget -P $DIR/update/ https://github.com/terrorbyte/bashrc/archive/master.zip
-	mv $DIR/update/master.zip $DIR/update/terrorshell-$DATE.zip
-	unzip $DIR/update/terrorshell-$DATE.zip -d $DIR/update
-	mv ~/.bashrc $DIR/update/bashrce-$DATE-.bak
-	mv $DIR/update/.bashrc ~/.bashrc
-	cp -rn $DIR/update/.terrorshell $DIR
-	rm -rf $DIR/update/.terrorshell
-}
+#updatebashrc() {
+#	#TODO check for update folder
+#	#TODO Output
+#	mkdir $DIR/update
+#	wget -P $DIR/update/ https://github.com/terrorbyte/bashrc/archive/master.zip
+#	mv $DIR/update/master.zip $DIR/update/terrorshell-$DATE.zip
+#	unzip $DIR/update/terrorshell-$DATE.zip -d $DIR/update
+#	mv ~/.bashrc $DIR/update/bashrce-$DATE-.bak
+#	mv $DIR/update/.bashrc ~/.bashrc
+#	cp -rn $DIR/update/.terrorshell $DIR
+#	rm -rf $DIR/update/.terrorshell
+#}
 
 #Extract Function
 extract() {
@@ -327,3 +328,4 @@ sha() {
 	fi
 	echo -n $2 | sha$1sum | cut -d' ' -f1
 }
+#cd() { builtin cd "$@" && . $HOME/$DIR/modules/gitcheck }

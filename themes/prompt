@@ -1,1 +1,2 @@
+#!/bin/bash
 PS1="$(if [[ ${EUID} == 0 ]]; then echo '\h'; else echo '\u'; fi)\342\224\200[\w]ハッカー> "

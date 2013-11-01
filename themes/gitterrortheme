@@ -1,0 +1,2 @@
+#!/bin/bash
+PS1="\[$bakblu\][\w]\[$txtrst\]\[$bakgrn\] $(git branch | grep '*' | cut -c3-)\[$bakgrn\]$(if [[ $(git branch | grep '*' | cut -c3-) == 'master' ]]; then echo '☆ '; else echo '☢ '; fi)$txtrst$txtgrn⮀\[$txtrst\] "
