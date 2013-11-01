@@ -1,4 +1,3 @@
-
 TerrorShell
 ===========
 
@@ -24,25 +23,25 @@ Install
 
 **Maual Install**
 
-'''git clone https://github.com/terrorbyte/bashrc.git ~/.terrorshell'''
+```git clone https://github.com/terrorbyte/bashrc.git ~/.terrorshell```
 
 Back up old bashrc
 
-'''cp ~/.bashrc ~/.bashrc.old'''
+```cp ~/.bashrc ~/.bashrc.old```
 
 Copy the new config
 
-'''cp ~/.terrorshell/templates/.bashrc ~/.bashrc'''
+```cp ~/.terrorshell/templates/.bashrc ~/.bashrc```
 
 Source your new shell
 
-'''source ~/.bashrc'''
+```source ~/.bashrc```
 
 **Auto Install**
 
 **WARNING**: Don't just run random programs you find on the internet.
 
-'''curl -L https://github.com/terrorbyte/bashrc/raw/master/install.sh | sh'''
+```curl -L https://github.com/terrorbyte/bashrc/raw/master/install.sh | sh```
 
-'''wget --no-check-certificate https://github.com/terrorbyte/bashrc/raw/master/install.sh -O - | sh'''
+```wget --no-check-certificate https://github.com/terrorbyte/bashrc/raw/master/install.sh -O - | sh```
 
