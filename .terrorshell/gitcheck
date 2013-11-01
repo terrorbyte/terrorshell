@@ -1,6 +1,0 @@
-#/bin/bash
-if [ -d .git ]; then
-  . $DIR/gitprompt
-else
-  . $DIR/prompt
-fi;

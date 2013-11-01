@@ -1,0 +1,8 @@
+#/bin/bash
+cd() { builtin cd "$@" && . $DIR/modules/gitcheck } 
+
+if [ -d .git ]; then
+  . $DIR/theme/git$THEME
+else
+  . $DIR/theme/$THEME
+fi;
