@@ -1,0 +1,8 @@
+#!/bin/bash
+alias gstatus='git status '
+alias add='git add '
+alias branch='git branch '
+alias commit='git commit'
+alias gdiff='git diff'
+alias checkout='git checkout '
+alias get='git '
