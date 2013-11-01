@@ -69,7 +69,7 @@ txtrst='\e[0m'    # Text Reset
 if [[ -e ~/.pkgmngr ]]; then
 	echo -n "Old file structure detected. Do you want to backup your old terrorshell before updating? (Y/n): "
 	read option
-	if [[ option == "Y" | option == "y" | option == "Yes" | option == "yes" | option == "YES" ]]; then
+	if [[ option == "Y" || option == "y" || option == "Yes" || option == "yes" || option == "YES" ]]; then
 		mkdir -p $DIR/{config,modules,templates,themes} 
 		mv ~/.pkgmngr $DIR/config/pkgmngr
 		mv ~/.bashrc $DIR/.bashrc.orig.bak
