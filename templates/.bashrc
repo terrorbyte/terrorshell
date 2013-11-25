@@ -243,6 +243,7 @@ alias rfs='sshfs'
 alias ip='curl -s http://checkip.dyndns.org/ | grep -o '[0-9][0-9]*.[0-9][0-9]*.[0-9][0-9]*.[0-9]*''
 alias irc='irssi'
 alias links='links google.com'
+alias refresh='source ~/.bashrc'
 
 #Encryption / GPG
 #enc and dec are builtin to openssl and are better
@@ -268,6 +269,13 @@ DATE="$(date +%d-%m)"
 #	mv $DIR/update/.bashrc ~/.bashrc
 #	cp -rn $DIR/update/.terrorshell $DIR
 #	rm -rf $DIR/update/.terrorshell
+#}
+
+#tshell() {
+#}
+
+#terrorshell() {
+#Add tshell "bultins" for things like refreshing / updating tshell
 #}
 
 #Extract Function
