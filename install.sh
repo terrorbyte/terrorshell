@@ -4,7 +4,7 @@ mkdir ~/.terrorshell
 #TODO Fix me before pull
 #Install to .terrorshell
 echo "Cloning github repo..."
-which git && git clone https://github.com/terrorbyte/bashrc.git ~/.terrorshell && cd ~/.terrorshell && git checkout experimental || {
+command -v git && git clone https://github.com/terrorbyte/bashrc.git ~/.terrorshell && cd ~/.terrorshell && git checkout experimental || {
 	echo "Git not found"
 	exit
 }
@@ -13,7 +13,7 @@ if [ -f ~/.bashrc ] || [ -h ~/.bashrc ]; then
   mv ~/.bashrc ~/.bashrc.orig;
 fi
 echo "Replacing .bashrc..."
-cp ~/.terrorshell/templates/.bashrc ~/.bashrc
+cp ~/.terrorshell/templates/bashrc ~/.bashrc
 echo "Welcome to a real shell:"
 echo "
 ___________                               _________.__           .__  .__   
