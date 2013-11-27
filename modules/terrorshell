@@ -1,0 +1,32 @@
+#!/bin/bash
+
+useage() { 
+	echo "Useage: tshell <help|update|version|modules|alias>"
+} 
+
+tshell() {
+	terrorshell "$@"
+}
+
+terrorshell() {
+	case "$@" in
+		"")
+			useage
+			;;
+		update)
+			echo update
+			;;
+		help)
+			useage
+			;;
+		version)
+			cat ~/$DIR/config/VERSION
+			;;
+		modules)
+			ls ~/$DIR/modules/
+			;;
+		alias)
+			alias
+			;;
+	esac
+}
