@@ -38,11 +38,7 @@ Source your new shell
 
 ```source ~/.bashrc```
 
-**Auto Install**
+Alias's
+=======
 
-**WARNING**: Don't just run random programs you find on the internet.
-
-```curl -L https://github.com/terrorbyte/bashrc/raw/master/install.sh | sh```
-
-```wget --no-check-certificate https://github.com/terrorbyte/bashrc/raw/master/install.sh -O - | sh```
-
+See the wiki

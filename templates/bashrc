@@ -1,9 +1,6 @@
 #!/bin/bash
 
 ###CONFIG SECTION###
-NAME=""
-EMAIL=""
-GITSUPPORT="yes"
 DIR=".terrorshell"
 THEME="prompt"
 MODULES=(gitcheck gitcut terrorshell)
@@ -20,6 +17,7 @@ MODULES=(gitcheck gitcut terrorshell)
 #* Inputrc bind in a seperate config file
 #* Update command check for version info and warn that since it doesn't over-wright that they need to change files according to the VERSION file
 #* terrorshell tools. Function to handle management of the bashrc, files, and modules
+#* move banner to modules
 ###################
 
 #Print banner
@@ -64,7 +62,7 @@ if [[ ! -e $HOME/$DIR/config/pkgmngr ]]; then
 			echo "ERROR 1: No package manager found. Please, manually add these settings into $HOME/$DIR/config/pkgmngr"
 		fi
 fi
-	echo -e "\[\e[0;31m\]In order for the package manager aliases to work properly you may also have to make this script root's .bashrc \[\e[0m\]"
+	echo -e "\e[0;31m In order for the package manager aliases to work properly you may also have to make this script root's .bashrc \e[0m"
 	#TODO Automatically 
 else
 	. $HOME/$DIR/config/pkgmngr
