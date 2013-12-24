@@ -7,6 +7,7 @@ Screenshots
 ===========
 
 ![alt text](http://i.imgur.com/EESj3jS.png "Terrortheme Example")
+An advanced theme and example (terrortheme)
 
 Features
 ========
@@ -42,3 +43,12 @@ Alias's
 =======
 
 See the wiki
+
+Themes
+======
+
+
+Uninstall
+=========
+
+

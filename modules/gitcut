@@ -1,4 +1,8 @@
 #!/bin/bash
+if [[ -e /usr/share/git/completion/git-completion.bash ]]; then
+        . /usr/share/git/completion/git-completion.bash
+fi
+	
 alias g='git'
 alias gst='git status'
 alias gl='git pull'
