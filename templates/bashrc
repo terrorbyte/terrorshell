@@ -3,21 +3,19 @@
 ###CONFIG SECTION###
 DIR=".terrorshell"
 THEME="prompt"
-MODULES=(gitcheck gitcut banner pkgmngr terrorshell)
+MODULES=(gitcheck gitcut banner pkgmngr terrorshell extract security)
 ###################
 
 ###TODO############
-#* Create remove script for old style bashrc. Use "sed -i.bak -e '5,10d' file"
-#* Git integration
 #* Add more package managers
 #* Github update improvements
 #* Alias's for designated directories
 #* Improved / Cleaned up alias's
 #* Inputrc bind in a seperate config file
 #* Update command check for version info and warn that since it doesn't over-wright that they need to change files according to the VERSION file
-#* terrorshell tools. Function to handle management of the bashrc, files, and modules
-#* move banner to modules
 ###################
+
+DATE="$(date +%m-%d)"
 
 . $HOME/.terrorshell/themes/$THEME
 
@@ -82,73 +80,4 @@ alias rfs='sshfs'
 alias ip='curl -s http://checkip.dyndns.org/ | grep -o '[0-9][0-9]*.[0-9][0-9]*.[0-9][0-9]*.[0-9]*''
 alias irc='irssi'
 alias links='links google.com'
-alias refresh='source ~/.bashrc'
-
-#System / Package manager commands
-alias inst="$INSTALLCMD"
-alias update="$UPDATEMIRRORCMD"
-alias upgrade="$UPDATECMD"
-alias remove="$REMOVECMD"
-
-#alias updatebashrc='cd ~/ && cp .bashrc .bashrc.bak && wget https://github.com/terrorbyte/bashrc/raw/master/.bashrc && cd -'
-
-DATE="$(date +%m-%d)"
-
-#Extract Function
-extract() {
-    local c e i
-
-    (($#)) || return
-
-    for i; do
-        c=''
-        e=1
-
-        if [[ ! -r $i ]]; then
-            echo "$0: file is unreadable: \`$i'" >&2
-            continue
-        fi
-
-        case $i in
-        *.t@(gz|lz|xz|b@(2|z?(2))|a@(z|r?(.@(Z|bz?(2)|gz|lzma|xz)))))
-               c='bsdtar xvf';;
-        	*.7z)  c='7z x';;
-        	*.Z)   c='uncompress';;
-        	*.bz2) c='bunzip2';;
-        	*.exe) c='cabextract';;
-        	*.gz)  c='gunzip';;
-        	*.rar) c='unrar x';;
-        	*.xz)  c='unxz';;
-        	*.zip) c='unzip';;
-        	*)     echo "$0: unrecognized file extension: \`$i'" >&2
-               continue;;
-        esac
-
-        command $c "$i"
-        e=$?
-    done
-
-    return $e
-}
-
-tunnel() {
-	#tun user@server 22 9999
-	if [[ $1 == "" || $2 == "" || $3 == "" ]]; then
-		echo "Useage: tunnel [user@server / config] [ssh port] [SOCKS5 proxy port]"
-		return 1
-	fi
-	ssh -D $3 -p $2 $1
-}
-
-md5() {
-	echo -n $@ | md5sum | cut -d' ' -f1
-}
-
-sha() {
-	if [[ $1 == "" || $2 == "" ]]; then
-		echo "Useage: sha [size] [string]"
-		echo "Where size is 1,224,256,384,512"
-		return 1
-	fi
-	echo -n $2 | sha$1sum | cut -d' ' -f1
-}
+alias refresh='bash && kill -SIGKILL $$'

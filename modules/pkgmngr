@@ -1,6 +1,5 @@
 #!/bin/bash
 #Get package manager
-# Debian, Ubuntu and derivatives (with apt-get)
 if [[ ! -e $HOME/$DIR/config/pkgmngr ]]; then
 	echo "###################"
 	echo "First time setup..."
@@ -8,25 +7,32 @@ if [[ ! -e $HOME/$DIR/config/pkgmngr ]]; then
 	echo "Run 'alias' to view the aliases loaded at any time."
 	#TODO Check that it is okay to continue
 	# mkdir $DIR &> /dev/null
-	if command -v apt-get &> /dev/null; then
+        # Debian, Ubuntu and derivatives (with apt-get)
+    if command -v apt-get &> /dev/null; then
        		echo "PKGMNGR='apt-get'" > $HOME/$DIR/config/pkgmngr 	
-		#apt-get install $PKGSTOINSTALL
+		    #apt-get install $PKGSTOINSTALL
         # OpenSuse (with zypper)
 	elif command -v zypper &> /dev/null; then
 		echo "PKGMNGR='zypper'" > $HOME/$DIR/config/pkgmngr
-		#"zypper in $PKGSTOINSTALL"
+		    #"zypper in $PKGSTOINSTALL"
         # Mandriva (with urpmi)
 	elif command -v urpmi &> /dev/null; then
       		echo "PKGMNGR='urmpi'" > $HOME/$DIR/config/pkgmngr
-		#urpmi $PKGSTOINSTALL
+		    #urpmi $PKGSTOINSTALL
         # Fedora and CentOS (with yum)
 	elif command -v yum &> /dev/null; then
       		echo "PKGMNGR='yum'" > $HOME/$DIR/config/pkgmngr
-		#yum install $PKGSTOINSTALL
+		    #yum install $PKGSTOINSTALL
         # ArchLinux (with pacman)
 	elif command -v pacman &> /dev/null; then
-       		echo "PKGMNGR='pacman'" > $HOME/$DIR/config/pkgmngr
-		#pacman -Sy $PKGSTOINSTALL
+            if command -v pacaur &> /dev/null; then
+                    echo "PKGMNGR='pacaur'" > $HOME/$DIR/config/pkgmngr
+            elif command -v yaourt &> /dev/null; then
+                    echo "PKGMNGR='yaourt'" > $HOME/$DIR/config/pkgmngr
+            else
+                    echo "PKGMNGR='pacman'" > $HOME/$DIR/config/pkgmngr
+            fi
+            #pacman -Sy $PKGSTOINSTALL
         # Else, if no package manager has been found
 	else
         # Set $NOPKGMANAGER
@@ -48,28 +54,33 @@ if [[ $PKGMNGR = 'apt-get' ]]; then
 	UPDATEMIRRORCMD="sudo $PKGMNGR update"
 	REMOVECMD="sudo $PKGMNGR remove"
 elif [[ $PKGMNGR = 'zypper' ]]; then
-	INSTALLCMD='$PKGMNGR in'
-	UPDATECMD='$PKGMNGR up'
-	UPDATEMIRRORCMD='$PKGMNGR ref'
-	REMOVECMD='$PKGMNGR remove'
+	INSTALLCMD='sudo $PKGMNGR in'
+	UPDATECMD='sudo $PKGMNGR up'
+	UPDATEMIRRORCMD='sudo $PKGMNGR ref'
+	REMOVECMD='sudo $PKGMNGR remove'
 elif [[ $PKGMNGR = 'urmpi' ]]; then
-	INSTALLCMD='$PKGMNGR' 
-        UPDATECMD='$PKGMNGR.update -a'
-        UPDATEMIRRORCMD='$UPDATECMD && echo "Cannot just update mirrors with urmpi"'
-        REMOVECMD='urpme'
+	INSTALLCMD='sudo $PKGMNGR' 
+    UPDATECMD='sudo $PKGMNGR.update -a'
+    UPDATEMIRRORCMD='sudo $UPDATECMD && echo "Cannot just update mirrors with urmpi"'
+    REMOVECMD='sudo urpme'
 elif [[ $PKGMNGR = 'yum'  ]]; then
-	INSTALLCMD='$PKGMNGR install'
-        UPDATECMD='$PKGMNGR update'
-        UPDATEMIRRORCMD='$PKGMNGR update && echo "Cannot just update mirrors with yum"'
-        REMOVECMD='$PKGMNGR remove'
+	INSTALLCMD='sudo $PKGMNGR install'
+    UPDATECMD='sudo $PKGMNGR update'
+    UPDATEMIRRORCMD='sudo $PKGMNGR update && echo "Cannot just update mirrors with yum"'
+    REMOVECMD='sudo $PKGMNGR remove'
 elif [[ $PKGMNGR = 'pacman' || $PKGMNGR = 'pacaur' || $PKGMNGR = 'yaourt' ]]; then
 	INSTALLCMD='sudo $PKGMNGR -Sy' 
-        UPDATECMD='sudo $PKGMNGR -Syu'
-        UPDATEMIRRORCMD='sudo $PKGMNGR -Syy'
-        REMOVECMD='sudo $PKGMNGR -Rs'
+    UPDATECMD='sudo $PKGMNGR -Syu'
+    UPDATEMIRRORCMD='sudo $PKGMNGR -Syy'
+    REMOVECMD='sudo $PKGMNGR -Rs'
 else
 	if [[ ! -e $HOME/$DIR/config/pkgmngr ]]; then
 		echo "ERROR 2: No package manager found. Please, manually add these settings into $HOME/$DIR/config/pkgmngr"
 	fi
 fi
 
+#System / Package manager commands
+alias inst="$INSTALLCMD"
+alias update="$UPDATEMIRRORCMD"
+alias upgrade="$UPDATECMD"
+alias remove="$REMOVECMD"
