@@ -1,9 +1,12 @@
 #!/bin/bash
 
-tunnel() {
-        #tun user@server 22 9999
+alias ip='curl ipinfo.io/ip'
+alias rfs='sshfs'
+
+socks() {
+        #socks user@server 22 9999
         if [[ $1 == "" || $2 == "" || $3 == "" ]]; then
-                echo "Useage: tunnel [user@server / config] [ssh port] [SOCKS5 proxy port]"
+                echo "Useage: socks [user@server / config] [ssh port] [SOCKS5 proxy port]"
                 return 1
         fi
         ssh -D $3 -p $2 $1

@@ -1,0 +1,15 @@
+#!/bin/bash
+
+pdc() {
+  local header = "
+  ###Per Directory Commands###
+  #Add any alias
+  "
+  if [[ $@ == "" ]]; then
+          echo $header >.pdc
+          $EDITOR .pdc
+  else
+          echo $header > ${@%/}/.pdc
+          $EDITOR ${@%/}/.pdc
+  fi
+}

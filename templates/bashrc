@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ###CONFIG SECTION###
-DIR=".terrorshell"
+DIR=".config/terrorshell"
 THEME="prompt"
 MODULES=(gitcheck gitcut banner pkgmngr terrorshell extract security)
 ###################
@@ -15,69 +15,73 @@ MODULES=(gitcheck gitcut banner pkgmngr terrorshell extract security)
 #* Update command check for version info and warn that since it doesn't over-wright that they need to change files according to the VERSION file
 ###################
 
+###Variables###
 DATE="$(date +%m-%d)"
+EDITOR="vim"
 
+###Set Theme###
 . $HOME/.terrorshell/themes/$THEME
 
+#If no theme set use prompt
+if [[ $THEME == "" ]]; then
+        THEME="prompt"
+fi
+
+###Import Modules###
 for module in "${MODULES[@]}"
 do
 	. $HOME/$DIR/modules/$module
 done
 
-
+###Import completion###
 if [[ -e /etc/bash_completion ]]; then
 	. /etc/bash_completion
 fi
 
-###Shopt Settings###
-shopt -s autocd
-shopt -s extglob
-shopt -s checkwinsize
+###Bash Settings###
+#Shopt Settings
+shopt -s autocd #automatically cd
+shopt -s extglob #extended matching support
+shopt -s checkwinsize #Check window size after each command. Necessary for dynamic themes
 
-###Inputrc Settings###
-bind 'set completion-ignore-case on'
-bind 'set completion-prefix-display-length 2'
-bind 'set show-all-if-ambiguous on'
-bind 'set show-all-if-unmodified on'
-bind 'set completion-map-case on'
+#Inputrc Settings#
+bind 'set completion-ignore-case on' #Autocomplete with ignore case
+bind 'set completion-prefix-display-length 2' 
+bind 'set show-all-if-ambiguous on' #List immediately. No stupid bell
+bind 'set show-all-if-unmodified on' 
+bind 'set completion-map-case on' #Treat '-' and '_' the same when completing
 
-#Aliases
+###Aliases###
 #Battery / Monitor / Keyboard
-alias bat='upower -d | grep percentage && upower -d | grep time'
-alias battery='upower -d | grep percentage && upower -d | grep time'
-alias bright='sudo setpci -s 00:02.0 F4.B=96'
-alias kb='setxkbmap -option grp:alt_shift_toggle us,dvorak'
+alias bat='upower -d | grep percentage | tr -s [:space:] && upower -d | grep time | tr -s [:space:]' #Use upower to get battery percentage and time left
+alias battery='upower -d | grep percentage | tr -s [:space:] && upower -d | grep time | tr -s [:space:]'
+alias bright='sudo setpci -s 00:02.0 F4.B=96' #Increase brightness
 
 #Navigation
-alias cl='clear'
-alias ba='cd -'
-alias disk='df -h'
-alias up='cd ..'
-alias rmf='rm -rfi'
+alias cl='clear' #Alias for clear. Ctrl+l is better though
+alias ba='cd -' #Previous directory
+alias disk='df -h' #List disk info
+alias up='cd ..' #Go up a directory
 
 #Safety features
-alias cp='cp -i'
-alias mv='mv -i'
-alias rm='rm -I'
-alias ln='ln -i'
-alias chown='chown --preserve-root'
-alias chmod='chmod --preserve-root'
+alias cp='cp -i' #Interactive copy
+alias mv='mv -i' #Interactive move
+alias rm='rm -I' #Interactive remove
+alias ln='ln -i' #Interactive link
+alias chown='chown --preserve-root' #Always preserve root
+alias chmod='chmod --preserve-root' 
 alias chgrp='chgrp --preserve-root'
-alias ls='ls --color=auto'
-alias lsa='ls -a --color=auto'
-alias lsl='ls -la --color=auto'
-alias attach='tmux attach'
-alias df='df -h'
-alias du='du -c -h'
-alias mkdir='mkdir -p -v'
-alias md='mkdir -p'
+alias ls='ls --color=auto' #Color by default
+alias lsa='ls -A --color=auto' #List all with color
+alias lsl='ls -la --color=auto' #Long list with color
+alias df='df -h' #Human readable disk info
+alias du='du -c -h' #Human readable file info
+alias mkdir='mkdir -p -v' #Make directory verbose and make parent directories
+alias md='mkdir -p' #Make directory with parents
 alias rd='rmdir'
+alias rmf='rm -rfi' #Interactive recursive remove directory
 alias d='dirs -v'
-alias openports='ss --all --numeric --processes --ipv4 --ipv6'
 
 #etc
-alias rfs='sshfs'
-alias ip='curl -s http://checkip.dyndns.org/ | grep -o '[0-9][0-9]*.[0-9][0-9]*.[0-9][0-9]*.[0-9]*''
 alias irc='irssi'
-alias links='links google.com'
-alias refresh='bash && kill -SIGKILL $$'
+alias refresh='bash && kill -SIGKILL $$' #Re-source bashrc (Done this way to reset $PS1 / $PS1_GIT)

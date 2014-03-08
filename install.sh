@@ -1,10 +1,10 @@
 #!/bin/bash
-echo "Creating ~/.terrorshell directory..."
-mkdir ~/.terrorshell
+echo "Creating ~/.config/terrorshell directory..."
+mkdir -p ~/.config/terrorshell
 #TODO Fix me before pull
-#Install to .terrorshell
+#Install to ~/.config/terrorshell
 echo "Cloning github repo..."
-command -v git &> /dev/null && git clone https://github.com/terrorbyte/bashrc.git ~/.terrorshell && cd ~/.terrorshell && git checkout experimental || {
+command -v git &> /dev/null && git clone https://github.com/terrorbyte/bashrc.git ~/.config/terrorshell && cd ~/.config/terrorshell && git checkout experimental || {
 	echo "Git not found"
 	exit
 }
@@ -13,7 +13,7 @@ if [ -f ~/.bashrc ] || [ -h ~/.bashrc ]; then
   mv ~/.bashrc ~/.bashrc.orig;
 fi
 echo "Replacing .bashrc..."
-cp ~/.terrorshell/templates/bashrc ~/.bashrc
+cp ~/.config/terrorshell/templates/bashrc ~/.bashrc
 echo "Welcome to a real shell:"
 echo "
 ___________                               _________.__           .__  .__   

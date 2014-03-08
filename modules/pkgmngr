@@ -6,6 +6,7 @@ if [[ ! -e $HOME/$DIR/config/pkgmngr ]]; then
 	echo "###################"
 	echo "Run 'alias' to view the aliases loaded at any time."
 	#TODO Check that it is okay to continue
+  #TODO Add alpine apk package manager
 	# mkdir $DIR &> /dev/null
         # Debian, Ubuntu and derivatives (with apt-get)
     if command -v apt-get &> /dev/null; then
@@ -42,7 +43,7 @@ if [[ ! -e $HOME/$DIR/config/pkgmngr ]]; then
 			echo "ERROR 1: No package manager found. Please, manually add these settings into $HOME/$DIR/config/pkgmngr"
 		fi
 fi
-	echo -e "\e[0;31m In order for the package manager aliases to work properly you may also have to make this script root's .bashrc \e[0m"
+	echo -e "\e\[[0;31m\] In order for the package manager aliases to work properly you may also have to make this script root's .bashrc \e\[[0m\]"
 	#TODO Automatically 
 else
 	. $HOME/$DIR/config/pkgmngr
