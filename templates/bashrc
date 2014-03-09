@@ -9,7 +9,6 @@ MODULES=(gitcheck gitcut banner pkgmngr terrorshell extract security)
 ###TODO############
 #* Add more package managers
 #* Github update improvements
-#* Alias's for designated directories
 #* Improved / Cleaned up alias's
 #* Inputrc bind in a seperate config file
 #* Update command check for version info and warn that since it doesn't over-wright that they need to change files according to the VERSION file
@@ -26,12 +25,6 @@ EDITOR="vim"
 if [[ $THEME == "" ]]; then
         THEME="prompt"
 fi
-
-###Import Modules###
-for module in "${MODULES[@]}"
-do
-	. $HOME/$DIR/modules/$module
-done
 
 ###Import completion###
 if [[ -e /etc/bash_completion ]]; then
@@ -85,3 +78,10 @@ alias d='dirs -v'
 #etc
 alias irc='irssi'
 alias refresh='bash && kill -SIGKILL $$' #Re-source bashrc (Done this way to reset $PS1 / $PS1_GIT)
+
+###Import Modules###
+#Import modules after shopt setting for extglobing and more
+for module in "${MODULES[@]}"
+do
+	. $HOME/$DIR/modules/$module
+done
