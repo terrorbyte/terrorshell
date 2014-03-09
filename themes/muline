@@ -1,0 +1,3 @@
+#!/bin/bash
+PS1="\[$bakblu\]$PWD$(perl -e "print ' 'x($(tput cols)-$(expr length $PWD)-$(expr length $(date +%T)))")$(date +%T)\n\[$txtrst\]"
+PS1_GIT="\[$bakblu\]$PWD$(perl -e "print ' 'x($(tput cols)-$(expr length $PWD)-$(expr length $(date +%T)))")$(date +%T)\n\[$txtrst\]"

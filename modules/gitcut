@@ -1,0 +1,17 @@
+#!/bin/bash
+if [[ -e /usr/share/git/completion/git-completion.bash ]]; then
+        . /usr/share/git/completion/git-completion.bash
+fi
+	
+alias g='git'
+alias gst='git status'
+alias gl='git pull'
+alias gup='git fetch && git rebase'
+alias gp='git push'
+alias gd='git diff | mate'
+alias gdv='git diff -w "$@" | vim -'
+alias gc='git commit -v'
+alias gca='git commit -v -a'
+alias gco='git checkout'
+alias gb='git branch'
+alias gba='git branch -a'

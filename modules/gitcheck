@@ -1,0 +1,19 @@
+#!/bin/bash
+
+if [ $(git rev-parse --git-dir 2> /dev/null) ]; then
+  . $HOME/$DIR/themes/git
+else
+  . $HOME/$DIR/themes/$THEME
+fi
+
+cd() { builtin cd "$@" && . $HOME/$DIR/modules/gitcheck; } 
+
+git() { 
+#command git "$@" 
+if [[ "$@" == *checkout* ]]; then
+	command git "$@"
+	. $HOME/$DIR/modules/gitcheck
+else
+	command git "$@"
+fi
+}

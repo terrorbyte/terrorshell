@@ -1,0 +1,49 @@
+#!/bin/bash
+
+useage() { 
+	echo "Useage: tshell <help|update|version|modules|backup|alias>"
+} 
+
+tshell() {
+	terrorshell "$@"
+}
+
+terrorshell() {
+	case "$@" in
+		"")
+			useage
+			;;
+		update)
+			read -r -p "Continuing to update will overwrite you current configuration, backup and continue? [y/N] " confirm
+			confirm=${confirm,,}    # toLower in bash 4.x
+			if [[ $confirm =~ ^(yes|y)$ ]]; then
+				echo "Backing up..."
+				#tar cvzf --exclude='*.tar.gz' ~/$DIR/config/backups/$DATE.tar.gz ~/$DIR ~/.bashrc
+				tar czf  $HOME/$DIR/config/backups/$DATE.tar.gz $HOME/$DIR $HOME/.bashrc
+        echo "Updating..."
+				git $HOME/$DIR/.git pull
+				#TODO better way
+				cp $HOME/$DIR/templates/bashrc $HOME/.bashrc
+			else
+				echo "Canceling update..."
+			fi
+			;;
+		help)
+			useage
+			;;
+		backup)
+			#tar cvzf --exclude='*.tar.gz' ~/$DIR/config/backups/$DATE.tar.gz ~/$DIR ~/.bashrc
+			tar cvzf  $HOME/$DIR/config/backups/$DATE.tar.gz $HOME/$DIR $HOME/.bashrc
+      ;;
+		version)
+			cat $HOME/$DIR/config/VERSION
+			;;
+		modules)
+			#ls ~/$DIR/modules/
+			echo ${MODULES[*]}
+			;;
+		alias)
+			alias
+			;;
+	esac
+}

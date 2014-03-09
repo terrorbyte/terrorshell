@@ -1,0 +1,4 @@
+#!/bin/bash
+PS1="\[\e[0;33m\]\u\[\e[0m\]λ "
+PROMPT_COMMAND='printf "%*s\e[0;32m%s\e[0m%s%s\e[0;31m%s\e[0m%s\r" "$(expr $COLUMNS - $(expr length $PWD) - $(expr length $?) - 3)" "[" "$PWD" "]" "[" "$?" "]"'
+#PROMPT_COMMAND='printf "%*s\r" "$COLUMNS" ""'

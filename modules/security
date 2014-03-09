@@ -1,0 +1,26 @@
+#!/bin/bash
+
+alias ip='curl ipinfo.io/ip'
+alias rfs='sshfs'
+
+socks() {
+        #socks user@server 22 9999
+        if [[ $1 == "" || $2 == "" || $3 == "" ]]; then
+                echo "Useage: socks [user@server / config] [ssh port] [SOCKS5 proxy port]"
+                return 1
+        fi
+        ssh -D $3 -p $2 $1
+}
+
+md5() {
+        echo -n $@ | md5sum | cut -d' ' -f1
+}
+
+sha() {
+        if [[ $1 == "" || $2 == "" ]]; then
+                echo "Useage: sha [size] [string]"
+                echo "Where size is 1,224,256,384,512"
+                return 1
+        fi
+        echo -n $2 | sha$1sum | cut -d' ' -f1
+}

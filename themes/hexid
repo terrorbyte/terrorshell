@@ -1,0 +1,61 @@
+#!/bin/bash
+#$(expr $(tput cols) + 1 - $(expr length $(pwd)) + 1 - $(expr length $(id -un)) + 1 - $(expr length $(hostname -s)) + 2 - $(expr length $ret) + 1)
+#Columns - [ - pwd - ] - \ - \ - [ - username - @ - hostname - :: - $? - ] = Number of '-'s needed
+
+#ret=$?
+fill=""
+git_fill=""
+
+for i in ${MODULES[@]}; do 
+	if [[ $i == "gitcheck" ]]; then 
+		git_support=true
+		break 
+	else 
+		git_support=false 
+	fi 
+done
+
+dir="$PWD"
+if [[ "$HOME" == ${dir:0:${#HOME}} ]]; then
+	dir="~${dir:${#HOME}}"
+fi 
+
+function prompt_gen() {
+fillsize=$(expr $(tput cols) + 1 - $(expr length $(pwd)) + 1 - $(expr length $(id -un)) + 1 - $(expr length $(hostname -s)) + 2 - $(expr length \$?) + 1)
+	
+	for ((i=1;i<=fillsize;i++)); do 
+        	fill+="-" 
+  	done
+
+	PSL="[\[\033[1;32m\]\w\[\033[0;m\]\]]"
+        PSR="[\[\033[1;36m\]\u@\h\033[0;m\]::\[\033[1;31m\]\$?\[\033[0;m\]]"
+}
+
+function git_prompt_gen() {
+
+if [ -f /usr/share/git/completion/git-prompt.sh ]; then
+        source /usr/share/git/completion/git-prompt.sh
+        GIT_PS1_SHOWDIRTYSTATE=1
+        GIT_PS1_SHOWSTASHSTATE=1
+        GIT_PS1_SHOWUNTRACKEDFILES=1
+fi
+
+	git_fillsize=$(tput cols)-$(expr length "[${dir}$(__git_ps1 '::%s')]  [$(id -un)@$(hostname -s)::${ret}]")
+#	git_fillsize=87
+#	git_fill=$(printf '%.0s-' $(seq 1 $git_fillsize))
+        for ((i=1;i<=git_fillsize;i++)); do  
+                git_fill+="-" 
+        done
+	git_PSL="[\[\033[1;32m\]\w\[\033[0;m\]\$(__git_ps1 \"::\[\033[1;34m\]%s\[\033[0;m\]\")]"
+        git_PSR="[\[\033[1;36m\]\u@\h\033[0;m\]::\[\033[1;31m\]${ret}\[\033[0;m\]]"
+}
+
+#prompt_gen
+#PS1="$PSL $fill $PSR\nλ "
+PS1="$(fillsize=$(expr $(tput cols) + 1 - $(expr length $(pwd)) + 1 - $(expr length $(id -un)) + 1 - $(expr length $(hostname -s)) + 2 - $(expr length $?) + 1))$(for ((i=1;i<=fillsize;i++)); do fill+="-"; done)$(PSL="[\[\033[1;32m\]\w\[\033[0;m\]\]]")$(PSR="[\[\033[1;36m\]\u@\h\033[0;m\]::\[\033[1;31m\]\$?\[\033[0;m\]]")$PSL $fill $PSR\nλ "
+
+
+if [[ $git_support == true ]]; then
+	git_prompt_gen
+	PS1_GIT="$git_PSL $git_fill $git_PSR\nλ "
+fi
