@@ -4,7 +4,7 @@ mkdir -p ~/.config/terrorshell
 #TODO Fix me before pull
 #Install to ~/.config/terrorshell
 echo "Cloning github repo..."
-command -v git &> /dev/null && git clone https://github.com/terrorbyte/bashrc.git ~/.config/terrorshell && cd ~/.config/terrorshell && git checkout experimental || {
+command -v git &> /dev/null && git clone https://github.com/terrorbyte/terrorshell.git ~/.config/terrorshell && cd ~/.config/terrorshell && git checkout experimental || {
 	echo "Git not found"
 	exit
 }

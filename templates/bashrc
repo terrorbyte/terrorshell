@@ -3,7 +3,7 @@
 ###CONFIG SECTION###
 DIR=".config/terrorshell"
 THEME="prompt"
-MODULES=(gitcheck gitcut banner pkgmngr terrorshell extract security)
+MODULES=(gitcheck gitcut banner pkgmngr terrorshell extract security perdir)
 ###################
 
 ###TODO############
