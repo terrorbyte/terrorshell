@@ -38,11 +38,15 @@ shopt -s extglob #extended matching support
 shopt -s checkwinsize #Check window size after each command. Necessary for dynamic themes
 
 #Inputrc Settings#
-bind 'set completion-ignore-case on' #Autocomplete with ignore case
-bind 'set completion-prefix-display-length 2' 
-bind 'set show-all-if-ambiguous on' #List immediately. No stupid bell
-bind 'set show-all-if-unmodified on' 
-bind 'set completion-map-case on' #Treat '-' and '_' the same when completing
+case "$-" in
+        *i*)
+          bind 'set completion-ignore-case on' #Autocomplete with ignore case
+          bind 'set completion-prefix-display-length 2' 
+          bind 'set show-all-if-ambiguous on' #List immediately. No stupid bell
+          bind 'set show-all-if-unmodified on' 
+          bind 'set completion-map-case on' #Treat '-' and '_' the same when completing
+          ;;
+esac
 
 ###Aliases###
 #Battery / Monitor / Keyboard
