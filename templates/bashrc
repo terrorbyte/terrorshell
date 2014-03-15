@@ -19,7 +19,7 @@ DATE="$(date +%m-%d)"
 EDITOR="vim"
 
 ###Set Theme###
-. $HOME/.terrorshell/themes/$THEME
+. $HOME/$DIR/themes/$THEME
 
 #If no theme set use prompt
 if [[ $THEME == "" ]]; then
@@ -41,9 +41,9 @@ shopt -s checkwinsize #Check window size after each command. Necessary for dynam
 case "$-" in
         *i*)
           bind 'set completion-ignore-case on' #Autocomplete with ignore case
-          bind 'set completion-prefix-display-length 2' 
+          bind 'set completion-prefix-display-length 2'
           bind 'set show-all-if-ambiguous on' #List immediately. No stupid bell
-          bind 'set show-all-if-unmodified on' 
+          bind 'set show-all-if-unmodified on'
           bind 'set completion-map-case on' #Treat '-' and '_' the same when completing
           ;;
 esac
@@ -66,7 +66,7 @@ alias mv='mv -i' #Interactive move
 alias rm='rm -I' #Interactive remove
 alias ln='ln -i' #Interactive link
 alias chown='chown --preserve-root' #Always preserve root
-alias chmod='chmod --preserve-root' 
+alias chmod='chmod --preserve-root'
 alias chgrp='chgrp --preserve-root'
 alias ls='ls --color=auto' #Color by default
 alias lsa='ls -A --color=auto' #List all with color
