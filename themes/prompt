@@ -1,2 +1,3 @@
 #!/bin/bash
 PS1="$(if [[ ${EUID} == 0 ]]; then echo '\h'; else echo '\u'; fi)\342\224\200[\w]ハッカー> "
+PS1_GIT="[\W] $(git branch 2> /dev/null | grep '*' | cut -c3-)> "
