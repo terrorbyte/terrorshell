@@ -1,6 +1,6 @@
 #!/bin/bash
 
-alias ip='curl ipinfo.io/ip'
+alias ipi='curl ipinfo.io/ip'
 alias rfs='sshfs'
 
 socks() {

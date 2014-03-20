@@ -1,9 +1,10 @@
 #!/bin/bash
-if [[ $PS1_GIT != "" ]]; then	
-	PS1="$PS1_GIT"
+if [[ $PS1_GIT != "" ]]; then
+  . $HOME/$DIR/themes/$THEME
+  PS1="$PS1_GIT"
 else
 	if [[ -e /usr/share/git/completion/git-prompt.sh ]]; then
 		. /usr/share/git/completion/git-prompt.sh
-		PS1="$(__git_ps1) -> "	
+		PS1="$(__git_ps1) -> "
 	fi
-fi	
+fi
