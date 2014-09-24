@@ -45,7 +45,6 @@ case "$-" in
           bind 'set show-all-if-ambiguous on' #List immediately. No stupid bell
           bind 'set show-all-if-unmodified on'
           bind 'set completion-map-case on' #Treat '-' and '_' the same when completing
-          bind 'TAB: menu-complete'
           ;;
 esac
 
