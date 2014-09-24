@@ -1,0 +1,260 @@
+#!/bin/bash
+
+###Variables###
+DATE="$(date +%m-%d)"
+EDITOR="vim"
+
+###Set Theme###
+#Prompt theme
+PS1="$(if [[ ${EUID} == 0 ]]; then echo '\h'; else echo '\u'; fi)\342\224\200[\w]ハッカー> "
+#TerrorShell theme
+#PS1="\[\e[42;30m\]\u\[\e[42;30m\]─\w\[\e[0m\]\[\e[42;30m\]ハッカー\[\e[0m\]\[\e[32m\]\[\e[48;5;237m\]\[\e[0m\]\[\e[38;5;237m\]\[\e[0m\] "
+
+###Import completion###
+if [[ -e /etc/bash_completion ]]; then
+	. /etc/bash_completion
+fi
+
+###Bash Settings###
+#Shopt Settings
+shopt -s autocd #automatically cd
+shopt -s extglob #extended matching support
+shopt -s checkwinsize #Check window size after each command. Necessary for dynamic themes
+
+#Inputrc Settings#
+case "$-" in
+        *i*)
+          bind 'set completion-ignore-case on' #Autocomplete with ignore case
+          bind 'set completion-prefix-display-length 2'
+          bind 'set show-all-if-ambiguous on' #List immediately. No stupid bell
+          bind 'set show-all-if-unmodified on'
+          bind 'set completion-map-case on' #Treat '-' and '_' the same when completing
+          ;;
+esac
+
+###Aliases###
+#Battery / Monitor / Keyboard
+alias bat='upower -d | grep percentage | tr -s [:space:] && upower -d | grep time | tr -s [:space:]' #Use upower to get battery percentage and time left
+alias battery='upower -d | grep percentage | tr -s [:space:] && upower -d | grep time | tr -s [:space:]'
+alias bright='sudo setpci -s 00:02.0 F4.B=96' #Increase brightness
+
+#Navigation
+alias cl='clear' #Alias for clear. Ctrl+l is better though
+alias ba='cd -' #Previous directory
+alias disk='df -h' #List disk info
+alias up='cd ..' #Go up a directory
+
+#Safety features
+alias cp='cp -i' #Interactive copy
+alias mv='mv -i' #Interactive move
+alias rm='rm -I' #Interactive remove
+alias ln='ln -i' #Interactive link
+alias chown='chown --preserve-root' #Always preserve root
+alias chmod='chmod --preserve-root'
+alias chgrp='chgrp --preserve-root'
+alias ls='ls --color=auto' #Color by default
+alias lsa='ls -A --color=auto' #List all with color
+alias lsl='ls -la --color=auto' #Long list with color
+alias df='df -h' #Human readable disk info
+alias du='du -c -h' #Human readable file info
+alias mkdir='mkdir -p -v' #Make directory verbose and make parent directories
+alias md='mkdir -p' #Make directory with parents
+alias rd='rmdir'
+alias rmf='rm -rfi' #Interactive recursive remove directory
+alias d='dirs -v'
+
+#etc
+alias irc='irssi'
+alias refresh='bash && kill -SIGKILL $$' #Re-source bashrc (Done this way to reset $PS1 / $PS1_GIT)
+
+###Import Modules###
+if [[ -e $HOME/$DIR/themes/banner ]]; then
+        cat $HOME/$DIR/themes/banner
+fi
+
+#Color aliases
+alias colors256='for i in {0..255}; do echo -ne "\e[38;05;${i}m ${i} "; done; echo -e "\e[m"'
+alias bgcolors='for i in {0..255}; do echo -ne "\e[7m\e[38;05;${i}m ${i} "; done; echo -e "\e[m"'
+alias grayshades='for i in {232..255}; do echo -ne "\e[7m\e[38;05;${i}m "; done; echo -e "\e[m"'
+alias colors='for i in {30..47}; do echo -ne "\e[${i}m ${i} "; done; echo -e "\e[0m"; for i in {30..47}; do echo -ne "\e[1m\e[${i}m ${i} "; done; echo -e "\e[m"'
+
+#Extract Function
+extract() {
+    local c e i
+
+    (($#)) || return
+
+    for i; do
+        c=''
+        e=1
+
+        if [[ ! -r $i ]]; then
+            echo "$0: file is unreadable: \`$i'" >&2
+            continue
+        fi
+
+        case $i in
+        *.t@(gz|lz|xz|b@(2|z?(2))|a@(z|r?(.@(Z|bz?(2)|gz|lzma|xz)))))
+               c='bsdtar xvf';;
+                *.7z)  c='7z x';;
+                *.Z)   c='uncompress';;
+                *.bz2) c='bunzip2';;
+                *.exe) c='cabextract';;
+                *.gz)  c='gunzip';;
+                *.rar) c='unrar x';;
+                *.xz)  c='unxz';;
+                *.zip) c='unzip';;
+                *)     echo "$0: unrecognized file extension: \`$i'" >&2
+               continue;;
+        esac
+
+        command $c "$i"
+        e=$?
+    done
+
+    return $e
+}
+if [[ -e /usr/share/git/completion/git-completion.bash ]]; then
+        . /usr/share/git/completion/git-completion.bash
+fi
+
+alias g='git'
+alias gst='git status'
+alias gl='git pull'
+alias gup='git fetch && git rebase'
+alias gp='git push'
+alias gd='git diff | mate'
+alias gdv='git diff -w "$@" | vim -'
+alias gc='git commit -v'
+alias gca='git commit -v -a'
+alias gco='git checkout'
+alias gb='git branch'
+alias gba='git branch -a'
+
+#Per directory commands
+pdc() {
+  local header = "
+  ###Per Directory Commands###
+  #Add any alias
+  "
+  if [[ $@ == "" ]]; then
+          echo $header >.pdc
+          $EDITOR .pdc
+  else
+          echo $header > ${@%/}/.pdc
+          $EDITOR ${@%/}/.pdc
+  fi
+}
+
+#Get package manager
+if [[ ! -e $HOME/$DIR/config/pkgmngr ]]; then
+	echo "###################"
+	echo "First time setup..."
+	echo "###################"
+	echo "Run 'alias' to view the aliases loaded at any time."
+	#TODO Check that it is okay to continue
+  #TODO Add alpine apk package manager
+	# mkdir $DIR &> /dev/null
+        # Debian, Ubuntu and derivatives (with apt-get)
+    if command -v apt-get &> /dev/null; then
+       		echo "PKGMNGR='apt-get'" > $HOME/$DIR/config/pkgmngr
+		    #apt-get install $PKGSTOINSTALL
+        # OpenSuse (with zypper)
+	elif command -v zypper &> /dev/null; then
+		echo "PKGMNGR='zypper'" > $HOME/$DIR/config/pkgmngr
+		    #"zypper in $PKGSTOINSTALL"
+        # Mandriva (with urpmi)
+	elif command -v urpmi &> /dev/null; then
+      		echo "PKGMNGR='urmpi'" > $HOME/$DIR/config/pkgmngr
+		    #urpmi $PKGSTOINSTALL
+        # Fedora and CentOS (with yum)
+	elif command -v yum &> /dev/null; then
+      		echo "PKGMNGR='yum'" > $HOME/$DIR/config/pkgmngr
+		    #yum install $PKGSTOINSTALL
+        # ArchLinux (with pacman)
+	elif command -v pacman &> /dev/null; then
+            if command -v pacaur &> /dev/null; then
+                    echo "PKGMNGR='pacaur'" > $HOME/$DIR/config/pkgmngr
+            elif command -v yaourt &> /dev/null; then
+                    echo "PKGMNGR='yaourt'" > $HOME/$DIR/config/pkgmngr
+            else
+                    echo "PKGMNGR='pacman'" > $HOME/$DIR/config/pkgmngr
+            fi
+            #pacman -Sy $PKGSTOINSTALL
+        # Else, if no package manager has been found
+	else
+        # Set $NOPKGMANAGER
+		echo "PKGMNGR=''" > $HOME/$DIR/config/pkgmngr
+		. $HOME/$DIR/config/pkgmngr
+		if [[ $PKGMNGR == '' ]]; then
+			echo "ERROR 1: No package manager found. Please, manually add these settings into $HOME/$DIR/config/pkgmngr"
+		fi
+fi
+	echo -e "\e[0;31mIn order for the package manager aliases to work properly you may also have to make this script root's .bashrc \e[0m"
+	#TODO Automatically
+else
+	. $HOME/$DIR/config/pkgmngr
+fi
+
+if [[ $PKGMNGR = 'apt-get' ]]; then
+	INSTALLCMD="sudo $PKGMNGR install"
+	UPDATECMD="sudo $PKGMNGR update && sudo $PKGMNGR dist-upgrade && sudo $PKGMNGR clean"
+	UPDATEMIRRORCMD="sudo $PKGMNGR update"
+	REMOVECMD="sudo $PKGMNGR remove"
+elif [[ $PKGMNGR = 'zypper' ]]; then
+	INSTALLCMD='sudo $PKGMNGR in'
+	UPDATECMD='sudo $PKGMNGR up'
+	UPDATEMIRRORCMD='sudo $PKGMNGR ref'
+	REMOVECMD='sudo $PKGMNGR remove'
+elif [[ $PKGMNGR = 'urmpi' ]]; then
+	INSTALLCMD='sudo $PKGMNGR'
+  UPDATECMD='sudo $PKGMNGR.update -a'
+  UPDATEMIRRORCMD='sudo $UPDATECMD && echo "Cannot just update mirrors with urmpi"'
+  REMOVECMD='sudo urpme'
+elif [[ $PKGMNGR = 'yum'  ]]; then
+	INSTALLCMD='sudo $PKGMNGR install'
+  UPDATECMD='sudo $PKGMNGR update'
+  UPDATEMIRRORCMD='sudo $PKGMNGR update && echo "Cannot just update mirrors with yum"'
+  REMOVECMD='sudo $PKGMNGR remove'
+elif [[ $PKGMNGR = 'pacman' || $PKGMNGR = 'pacaur' || $PKGMNGR = 'yaourt' ]]; then
+	INSTALLCMD='sudo $PKGMNGR -Sy'
+  UPDATECMD='sudo $PKGMNGR -Syu'
+  UPDATEMIRRORCMD='sudo $PKGMNGR -Syy'
+  REMOVECMD='sudo $PKGMNGR -Rs'
+else
+	if [[ ! -e $HOME/$DIR/config/pkgmngr ]]; then
+		echo "ERROR 2: No package manager found. Please, manually add these settings into $HOME/$DIR/config/pkgmngr"
+	fi
+fi
+
+#System / Package manager commands
+alias inst="$INSTALLCMD"
+alias update="$UPDATEMIRRORCMD"
+alias upgrade="$UPDATECMD"
+alias remove="$REMOVECMD"
+
+#Security
+alias ipi='curl ipinfo.io/ip'
+alias rfs='sshfs'
+
+socks() {
+        #socks user@server 22 9999
+        if [[ $1 == "" || $2 == "" || $3 == "" ]]; then
+                echo "Useage: socks [user@server / config] [ssh port] [SOCKS5 proxy port]"
+                return 1
+        fi
+        ssh -D $3 -p $2 $1
+}
+
+md5() {
+        echo -n $@ | md5sum | cut -d' ' -f1
+}
+
+sha() {
+        if [[ $1 == "" || $2 == "" ]]; then
+                echo "Useage: sha [size] [string]"
+                echo "Where size is 1,224,256,384,512"
+                return 1
+        fi
+        echo -n $2 | sha$1sum | cut -d' ' -f1
+}
