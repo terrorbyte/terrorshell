@@ -13,11 +13,11 @@ Features
 ========
 
 * Sane Defaults: By default TerrorShell will make bash much easier to use, prettier, and hopefully quicker.
-* Package Manager Wrapper: Sometimes you don't want to have to remember which distro (or package manager) is on the computer you're using, with TerrorShell its as simple as 'install ' and the rest will be handled for you. See the wrapper documentation. TODO
-* Git Integration: One of the things you hear about a lot is shells having integration with Git and other source management systems.
-* Aliases: We attempted to try and create some of the best built in bash aliases to make your life that much easier (or quicker). See alias documentation. TODO
-* Modules: Tack in your new module (maybe SVN directory integration) into the .bashrc modules variable and the terrorshell module directory and you are off.
-* Installer / Updater: Stay up to date in a non-intrusive way. The updates are up to you.
+* Package Manager Wrapper: Sometimes you don't want to have to remember which distro (or package manager) is on the computer you're using, with TerrorShell its as simple as 'install ' and the rest will be handled for you. See the [wrapper documentation](https://github.com/terrorbyte/terrorshell/wiki/Modules#pkgmngr).
+* Git Integration: One of the things you hear about a lot is shells having integration with Git and other source management systems. See the [git documentation](https://github.com/terrorbyte/terrorshell/wiki/Modules#git)
+* Aliases: We attempted to try and create some of the best built in bash aliases to make your life that much easier (or quicker). See [alias documentation](https://github.com/terrorbyte/terrorshell/wiki/Modules#terrorshell--tshell).
+* Modules: Tack in your new module (maybe SVN directory integration) into the .bashrc modules variable and the terrorshell module directory and you are off. See [docs](https://github.com/terrorbyte/terrorshell/wiki/Modules#module-list).
+* Installer / Updater: Stay up to date in a non-intrusive way. The updates are up to you and backups are made after each update.
 * Per-directory Commands: Sometimes you are in a specific directory you might need different aliases or scripts.
 
 Install
@@ -39,16 +39,15 @@ Source your new shell
 
 ```source ~/.bashrc```
 
-Alias's
-=======
-
-See the wiki
 
 Themes
 ======
 
+See a list of themes [here](https://github.com/terrorbyte/terrorshell/wiki/Theme-List)
+
+See how to make themes [here](https://github.com/terrorbyte/terrorshell/wiki/Themes)
 
 Uninstall
 =========
 
-
+Simply run uninstall.sh in the config directory.

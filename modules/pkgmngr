@@ -10,7 +10,7 @@ if [[ ! -e $HOME/$DIR/config/pkgmngr ]]; then
 	# mkdir $DIR &> /dev/null
         # Debian, Ubuntu and derivatives (with apt-get)
     if command -v apt-get &> /dev/null; then
-       		echo "PKGMNGR='apt-get'" > $HOME/$DIR/config/pkgmngr 	
+       		echo "PKGMNGR='apt-get'" > $HOME/$DIR/config/pkgmngr
 		    #apt-get install $PKGSTOINSTALL
         # OpenSuse (with zypper)
 	elif command -v zypper &> /dev/null; then
@@ -44,7 +44,7 @@ if [[ ! -e $HOME/$DIR/config/pkgmngr ]]; then
 		fi
 fi
 	echo -e "\e[0;31mIn order for the package manager aliases to work properly you may also have to make this script root's .bashrc \e[0m"
-	#TODO Automatically 
+	#TODO Automatically
 else
 	. $HOME/$DIR/config/pkgmngr
 fi
@@ -60,20 +60,20 @@ elif [[ $PKGMNGR = 'zypper' ]]; then
 	UPDATEMIRRORCMD='sudo $PKGMNGR ref'
 	REMOVECMD='sudo $PKGMNGR remove'
 elif [[ $PKGMNGR = 'urmpi' ]]; then
-	INSTALLCMD='sudo $PKGMNGR' 
-    UPDATECMD='sudo $PKGMNGR.update -a'
-    UPDATEMIRRORCMD='sudo $UPDATECMD && echo "Cannot just update mirrors with urmpi"'
-    REMOVECMD='sudo urpme'
+	INSTALLCMD='sudo $PKGMNGR'
+  UPDATECMD='sudo $PKGMNGR.update -a'
+  UPDATEMIRRORCMD='sudo $UPDATECMD && echo "Cannot just update mirrors with urmpi"'
+  REMOVECMD='sudo urpme'
 elif [[ $PKGMNGR = 'yum'  ]]; then
 	INSTALLCMD='sudo $PKGMNGR install'
-    UPDATECMD='sudo $PKGMNGR update'
-    UPDATEMIRRORCMD='sudo $PKGMNGR update && echo "Cannot just update mirrors with yum"'
-    REMOVECMD='sudo $PKGMNGR remove'
+  UPDATECMD='sudo $PKGMNGR update'
+  UPDATEMIRRORCMD='sudo $PKGMNGR update && echo "Cannot just update mirrors with yum"'
+  REMOVECMD='sudo $PKGMNGR remove'
 elif [[ $PKGMNGR = 'pacman' || $PKGMNGR = 'pacaur' || $PKGMNGR = 'yaourt' ]]; then
-	INSTALLCMD='sudo $PKGMNGR -Sy' 
-    UPDATECMD='sudo $PKGMNGR -Syu'
-    UPDATEMIRRORCMD='sudo $PKGMNGR -Syy'
-    REMOVECMD='sudo $PKGMNGR -Rs'
+	INSTALLCMD='sudo $PKGMNGR -Sy'
+  UPDATECMD='sudo $PKGMNGR -Syu'
+  UPDATEMIRRORCMD='sudo $PKGMNGR -Syy'
+  REMOVECMD='sudo $PKGMNGR -Rs'
 else
 	if [[ ! -e $HOME/$DIR/config/pkgmngr ]]; then
 		echo "ERROR 2: No package manager found. Please, manually add these settings into $HOME/$DIR/config/pkgmngr"

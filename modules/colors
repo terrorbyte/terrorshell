@@ -1,0 +1,7 @@
+#!/bin/bash
+
+#Color aliases
+alias colors256='for i in {0..255}; do echo -ne "\e[38;05;${i}m ${i} "; done; echo -e "\e[m"'
+alias bgcolors='for i in {0..255}; do echo -ne "\e[7m\e[38;05;${i}m ${i} "; done; echo -e "\e[m"'
+alias grayshades='for i in {232..255}; do echo -ne "\e[7m\e[38;05;${i}m "; done; echo -e "\e[m"'
+alias colors='for i in {30..47}; do echo -ne "\e[${i}m ${i} "; done; echo -e "\e[0m"; for i in {30..47}; do echo -ne "\e[1m\e[${i}m ${i} "; done; echo -e "\e[m"'
