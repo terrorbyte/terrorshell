@@ -1,0 +1,6 @@
+You can add any bash functionality that is not currently present
+in terrorshell to the userbashrc file (~/.config/terrorshell/modules/userbashrc)
+This file will not be touched or modified by terrorshell ever.
+Your original bashrc is below, copy anything that you desire to the userbashrc file
+this will be automatically loaded by terrorshell as a module. To restart terrorshell(bash)
+after editing, simply type bash into your terminal emulator

@@ -3,7 +3,7 @@
 ###CONFIG SECTION###
 DIR=".config/terrorshell"
 THEME="prompt"
-MODULES=(gitcheck gitcut banner pkgmngr terrorshell extract security perdir)
+MODULES=(gitcheck gitcut banner pkgmngr terrorshell extract security perdir userbashrc)
 ###################
 
 ###TODO############
@@ -51,7 +51,7 @@ esac
 
 ###Aliases###
 #Battery / Monitor / Keyboard
-alias bat='upower -d | grep percentage | tr -s [:space:] && upower -d | grep time | tr -s [:space:]' #Use upower to get battery percentage and time left
+alias bat='upower -d | grep percentage | head -n1 | tr -s [:space:] && upower -d | grep time | head -n1 | tr -s [:space:]' #Use upower to get battery percentage and time left
 alias battery='upower -d | grep percentage | tr -s [:space:] && upower -d | grep time | tr -s [:space:]'
 alias bright='sudo setpci -s 00:02.0 F4.B=96' #Increase brightness
 
