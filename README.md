@@ -6,7 +6,7 @@ The TerrorShell is an attempt to bring bash back into the main spotlight for cus
 Screenshots
 ===========
 
-![alt text](http://i.imgur.com/EESj3jS.png "Terrortheme Example")
+![alt text](http://i.imgur.com/b74Kaf4.png "Terrortheme Example")
 An advanced theme and example (terrortheme)
 
 Features
